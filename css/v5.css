@@ -1,0 +1,235 @@
+/* ============= v5 升级：半身立绘 + 树状章节面板 ============= */
+
+/* ===== 立绘：半身 PNG 适配 ===== */
+.portrait{
+  width:min(520px, 92%) !important;
+  height:88% !important;
+  bottom:90px !important;
+  filter:drop-shadow(0 18px 50px rgba(125,77,255,.5)) !important;
+  transition:opacity .55s ease, transform .5s ease !important;
+}
+.portrait img{
+  width:100% !important;
+  height:100% !important;
+  object-fit:contain !important;
+  object-position:bottom center !important;
+}
+
+/* ===== 树状章节面板 ===== */
+.chapter-panel.tree-mode{
+  position:fixed; inset:0;
+  background:radial-gradient(ellipse at 50% 30%, rgba(45,30,80,.92), rgba(8,5,20,.97));
+  z-index:1500;
+  display:flex; align-items:flex-start; justify-content:center;
+  overflow-y:auto;
+  padding:32px 16px 60px;
+  backdrop-filter:blur(8px);
+}
+.chapter-panel.tree-mode .tree-card{
+  width:100%; max-width:760px;
+  background:linear-gradient(180deg, rgba(30,20,60,.85), rgba(15,10,35,.9));
+  border:1px solid rgba(125,77,255,.35);
+  border-radius:18px;
+  padding:24px 16px 28px;
+  box-shadow:0 30px 80px rgba(0,0,0,.6);
+}
+.chapter-panel.tree-mode h3{
+  margin:0 0 6px; text-align:center;
+  font-size:22px; letter-spacing:1px;
+  color:#fff;
+}
+.chapter-panel.tree-mode .tree-sub{
+  text-align:center; font-size:12px; opacity:.6; margin-bottom:24px;
+  letter-spacing:.5px;
+}
+.chapter-panel.tree-mode .tree-legend{
+  display:flex; gap:14px; justify-content:center; margin-bottom:18px; font-size:11px; opacity:.7;
+}
+.chapter-panel.tree-mode .tree-legend span{display:inline-flex; align-items:center; gap:5px;}
+.chapter-panel.tree-mode .tree-legend i{
+  display:inline-block; width:10px; height:10px; border-radius:50%;
+}
+.chapter-panel.tree-mode .leg-read i{ background:#7d4dff; box-shadow:0 0 10px #7d4dff; }
+.chapter-panel.tree-mode .leg-cur i{ background:#3ad6ff; box-shadow:0 0 10px #3ad6ff; }
+.chapter-panel.tree-mode .leg-lock i{ background:rgba(255,255,255,.18); }
+
+/* 树容器 */
+.tree-container{
+  position:relative;
+  padding:10px 0;
+}
+.tree-day{
+  margin-bottom:30px;
+  position:relative;
+}
+.tree-day-label{
+  display:inline-block;
+  padding:4px 14px;
+  background:linear-gradient(90deg, rgba(125,77,255,.4), rgba(58,214,255,.25));
+  border:1px solid rgba(255,255,255,.2);
+  border-radius:14px;
+  font-size:13px;
+  letter-spacing:1px;
+  margin-bottom:14px;
+  margin-left:18px;
+}
+.tree-row{
+  position:relative;
+  display:flex;
+  align-items:flex-start;
+  gap:14px;
+  padding:0 0 0 18px;
+}
+.tree-row + .tree-row{
+  margin-top:4px;
+}
+/* 主干竖线 */
+.tree-day::before{
+  content:"";
+  position:absolute;
+  left:32px;
+  top:46px;
+  bottom:0;
+  width:2px;
+  background:linear-gradient(180deg, rgba(125,77,255,.5), rgba(125,77,255,.1));
+}
+.tree-row::before{
+  content:"";
+  position:absolute;
+  left:14px;
+  top:24px;
+  width:18px;
+  height:2px;
+  background:rgba(125,77,255,.4);
+}
+.tree-row:first-child::before{ display:none; }
+
+.tree-node{
+  flex-shrink:0;
+  width:28px; height:28px;
+  border-radius:50%;
+  border:2px solid rgba(255,255,255,.2);
+  background:rgba(20,15,45,.9);
+  display:flex; align-items:center; justify-content:center;
+  font-size:13px; font-weight:600;
+  color:rgba(255,255,255,.5);
+  margin-top:8px;
+  position:relative;
+  z-index:2;
+}
+.tree-row.read .tree-node{
+  border-color:#7d4dff;
+  background:linear-gradient(135deg, #7d4dff, #5b3ab5);
+  color:#fff;
+  box-shadow:0 0 14px rgba(125,77,255,.6);
+}
+.tree-row.current .tree-node{
+  border-color:#3ad6ff;
+  background:linear-gradient(135deg, #3ad6ff, #1d8fb5);
+  color:#fff;
+  box-shadow:0 0 14px rgba(58,214,255,.7);
+  animation:nodePulse 1.6s ease-in-out infinite;
+}
+.tree-row.locked .tree-node{
+  border-color:rgba(255,255,255,.15);
+  color:rgba(255,255,255,.3);
+}
+@keyframes nodePulse{
+  0%,100%{ transform:scale(1); }
+  50%{ transform:scale(1.15); }
+}
+
+.tree-card-body{
+  flex:1;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:12px;
+  padding:12px 14px;
+  cursor:pointer;
+  transition:all .22s;
+}
+.tree-row:not(.locked) .tree-card-body:hover{
+  background:rgba(125,77,255,.18);
+  border-color:rgba(125,77,255,.5);
+  transform:translateX(4px);
+}
+.tree-row.locked .tree-card-body{
+  cursor:not-allowed;
+  opacity:.55;
+}
+.tree-row.read .tree-card-body{
+  background:rgba(125,77,255,.1);
+  border-color:rgba(125,77,255,.3);
+}
+.tree-row.current .tree-card-body{
+  background:rgba(58,214,255,.12);
+  border-color:rgba(58,214,255,.4);
+}
+.tree-name{
+  font-size:15px;
+  font-weight:600;
+  color:#fff;
+  margin-bottom:3px;
+}
+.tree-row.locked .tree-name{
+  letter-spacing:6px;
+  color:rgba(255,255,255,.4);
+}
+.tree-tag{
+  font-size:11px;
+  opacity:.55;
+  letter-spacing:.5px;
+}
+.tree-row.locked .tree-tag{
+  opacity:.35;
+}
+
+/* 隐藏章节特殊样式 */
+.tree-row.hidden-ch.read .tree-node{
+  background:linear-gradient(135deg, #ffa500, #c47b00);
+  border-color:#ffa500;
+  box-shadow:0 0 14px rgba(255,165,0,.5);
+}
+.tree-row.hidden-ch .tree-tag::before{
+  content:"☆ ";
+  color:#ffa500;
+}
+
+/* 关闭按钮 */
+.chapter-panel.tree-mode .tree-close{
+  display:block;
+  margin:24px auto 0;
+  padding:10px 32px;
+  background:linear-gradient(135deg, #7d4dff, #5b3ab5);
+  border:none;
+  border-radius:24px;
+  color:#fff;
+  font-size:14px;
+  letter-spacing:2px;
+  cursor:pointer;
+  box-shadow:0 10px 24px rgba(125,77,255,.4);
+}
+.chapter-panel.tree-mode .tree-close:hover{
+  transform:translateY(-2px);
+  box-shadow:0 14px 30px rgba(125,77,255,.5);
+}
+
+/* 进度条 */
+.tree-progress{
+  margin:0 16px 22px;
+  height:6px; border-radius:3px;
+  background:rgba(255,255,255,.08);
+  overflow:hidden;
+  position:relative;
+}
+.tree-progress-bar{
+  position:absolute; top:0; bottom:0; left:0;
+  background:linear-gradient(90deg, #7d4dff, #3ad6ff);
+  box-shadow:0 0 12px rgba(125,77,255,.6);
+  transition:width .6s ease;
+}
+.tree-progress-text{
+  text-align:center;
+  font-size:11px; opacity:.6;
+  margin-top:-14px; margin-bottom:18px;
+}
