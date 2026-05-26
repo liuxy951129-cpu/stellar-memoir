@@ -49,11 +49,14 @@ window.Engine = {
         continue;
       }
       if (t === "chapter"){
-        // 体力消耗
-        if (!Sys.consumeStamina(this.save, Sys.STAMINA_PER_CHAPTER)){
-          UI.switchScreen("title-screen");
-          return;
+        // 体力消耗（仅未读章节）
+        if (!Chapters.hasRead(this.save, this.save.currentRoute, this.save.stepIndex)){
+          if (!Sys.consumeStamina(this.save, Sys.STAMINA_PER_CHAPTER)){
+            UI.switchScreen("title-screen");
+            return;
+          }
         }
+        Chapters.markRead(this.save, this.save.currentRoute, this.save.stepIndex);
         this.showChapter(step);
         this.save.stepIndex++;
         return;
@@ -133,6 +136,48 @@ window.Engine = {
         Save.store(this.save);
         this.save.stepIndex++;
         continue;
+      }
+      if (t === "countdown" || t === "touch" || t === "drag" || t === "typing" || t === "swipe" || t === "qte"){
+        // 互动机制
+        const handler = Interact[t === "qte" ? "qte" : t];
+        this.save.stepIndex++;
+        Save.store(this.save);
+        handler.call(Interact, step, (result) => {
+          // 应用 success/fail 分支
+          let target = null;
+          if (t === "countdown" && result.opt){
+            // 倒计时按选项
+            const opt = result.opt;
+            if (opt.aff) Object.keys(opt.aff).forEach(k => this.save.affinity[k] = (this.save.affinity[k]||0) + opt.aff[k]);
+            if (opt.flag) this.save.flags[opt.flag] = true;
+            target = opt.next;
+          } else if (t === "touch" && result.region){
+            const r = result.region;
+            if (r.aff) Object.keys(r.aff).forEach(k => this.save.affinity[k] = (this.save.affinity[k]||0) + r.aff[k]);
+            if (r.flag) this.save.flags[r.flag] = true;
+            target = r.next;
+          } else {
+            const branch = result.success ? step.success : step.fail;
+            if (branch){
+              if (branch.flag) this.save.flags[branch.flag] = true;
+              if (branch.aff) Object.keys(branch.aff).forEach(k => this.save.affinity[k] = (this.save.affinity[k]||0) + branch.aff[k]);
+              target = branch.next;
+            }
+          }
+          if (target){
+            const idx = this.current().findIndex(s => s.type === "label" && s.id === target);
+            if (idx >= 0) this.save.stepIndex = idx + 1;
+          }
+          UI.renderRoundHUD(this.save);
+          Save.store(this.save);
+          this.run();
+        });
+        return;
+      }
+      if (t === "be"){
+        // bad ending
+        this.renderEnding({ tag:"BE", title:step.title, en:step.en, body:step.body });
+        return;
       }
       if (t === "end"){
         this.renderEnding(step);

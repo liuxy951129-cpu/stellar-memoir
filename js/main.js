@@ -158,6 +158,13 @@
         UI.toast(Engine.skipMode ? "跳过已读：开" : "跳过：关");
         if (Engine.skipMode) Engine.run();
         break;
+      case "chapters":
+        if (save.currentRoute){
+          Chapters.showPanel(save, save.currentRoute);
+        } else {
+          UI.toast("请先开启一条主线");
+        }
+        break;
       case "log":
         UI.modal({
           title:"对话日志",
