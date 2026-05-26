@@ -319,3 +319,141 @@
 .replay-prologue:hover{
   background:rgba(125,77,255,.4);
 }
+
+/* ===== v6.1: 章节切换分级 ===== */
+.chapter-fade.chapter-only{
+  position:absolute !important;
+  inset:auto 0 35% 0 !important;
+  background:transparent !important;
+  display:flex !important;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  pointer-events:none;
+  animation:chOnlyIn .55s ease;
+}
+.chapter-fade.chapter-only .cf-name-only{
+  font-size:24px;
+  font-weight:300;
+  letter-spacing:8px;
+  color:#fff;
+  text-shadow:0 0 24px rgba(125,77,255,.7), 0 4px 14px rgba(0,0,0,.8);
+  padding:10px 30px;
+  background:linear-gradient(90deg, transparent, rgba(20,15,45,.6), transparent);
+  border-top:1px solid rgba(255,255,255,.15);
+  border-bottom:1px solid rgba(255,255,255,.15);
+}
+.chapter-fade.chapter-only .cf-en-small{
+  font-family:var(--font-en);
+  font-style:italic;
+  color:rgba(189,176,255,.75);
+  margin-top:8px;
+  font-size:12px;
+  letter-spacing:3px;
+}
+@keyframes chOnlyIn{
+  from{ opacity:0; transform:translateY(20px); }
+  to{ opacity:1; transform:translateY(0); }
+}
+
+.chapter-fade.day-change .cf-day-big{
+  font-size:54px;
+  font-weight:200;
+  color:#3ad6ff;
+  letter-spacing:18px;
+  margin-bottom:24px;
+  text-shadow:0 0 30px rgba(58,214,255,.7);
+  animation:dayBigIn 1.2s ease;
+}
+@keyframes dayBigIn{
+  0%{ opacity:0; letter-spacing:50px; }
+  100%{ opacity:1; letter-spacing:18px; }
+}
+
+/* ===== v6.1: Prologue 大立绘选卡 ===== */
+.pl-route-cards{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  align-items:center;
+  width:100%;
+  max-width:520px;
+  margin:0 auto;
+}
+.pl-route-card{
+  position:relative;
+  width:100%;
+  height:160px;
+  border-radius:18px;
+  overflow:hidden;
+  cursor:pointer;
+  background:linear-gradient(135deg, rgba(30,20,60,.85), rgba(15,10,35,.92));
+  border:1px solid rgba(125,77,255,.4);
+  display:flex;
+  align-items:stretch;
+  transition:all .3s;
+  box-shadow:0 14px 40px rgba(0,0,0,.55);
+}
+.pl-route-card:hover{
+  transform:translateY(-4px);
+  border-color:rgba(255,119,200,.65);
+  box-shadow:0 22px 60px rgba(125,77,255,.45);
+}
+.pl-route-card.picked{
+  border-color:#ff77c8;
+  background:linear-gradient(135deg, rgba(125,77,255,.45), rgba(255,119,200,.4));
+}
+.pl-route-card .prc-img{
+  width:42%;
+  position:relative;
+  overflow:hidden;
+  background:#0a0820;
+}
+.pl-route-card .prc-img img{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center 14%;
+}
+.pl-route-card .prc-img::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(90deg, transparent 55%, rgba(15,10,35,.95));
+  pointer-events:none;
+}
+.pl-route-card .prc-info{
+  flex:1;
+  padding:18px 20px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  text-align:left;
+  color:#fff;
+}
+.pl-route-card .prc-archive{
+  font-size:11px;
+  letter-spacing:3px;
+  color:#3ad6ff;
+  margin-bottom:6px;
+}
+.pl-route-card .prc-name{
+  font-size:24px;
+  font-weight:600;
+  margin-bottom:4px;
+  letter-spacing:2px;
+}
+.pl-route-card .prc-meta{
+  font-size:12px;
+  color:rgba(255,255,255,.65);
+  letter-spacing:.5px;
+  margin-bottom:8px;
+}
+.pl-route-card .prc-tag{
+  font-size:11px;
+  color:rgba(255,214,107,.85);
+  letter-spacing:1px;
+  font-style:italic;
+}

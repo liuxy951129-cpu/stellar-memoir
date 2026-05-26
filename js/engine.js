@@ -193,15 +193,30 @@ window.Engine = {
     Portrait.clear(document.getElementById("charStage"));
     document.getElementById("dayTag").textContent = "Day " + step.day;
     document.getElementById("chapterTag").textContent = step.name;
+
+    // v6.1: Day 切换才显示大 DAY 卡，否则只用底部小章节条
+    const lastDay = this._lastShownDay;
+    const isDayChange = (lastDay === undefined || lastDay !== step.day);
+    this._lastShownDay = step.day;
+
     const cf = document.createElement("div");
-    cf.className = "chapter-fade";
-    cf.innerHTML = `<div class="cf-day">DAY ${step.day}</div><div class="cf-name">${step.name}</div><div class="cf-en">${step.en || ""}</div>`;
+    if (isDayChange){
+      cf.className = "chapter-fade day-change";
+      cf.innerHTML = `<div class="cf-day-big">DAY ${step.day}</div>
+                      <div class="cf-name">${step.name}</div>
+                      <div class="cf-en">${step.en || ""}</div>`;
+    } else {
+      cf.className = "chapter-fade chapter-only";
+      cf.innerHTML = `<div class="cf-name-only">${step.name}</div>
+                      <div class="cf-en-small">${step.en || ""}</div>`;
+    }
     document.getElementById("game-screen").appendChild(cf);
+    const showMs = isDayChange ? 1700 : 950;
     setTimeout(()=>{
-      cf.style.transition = "opacity 1s";
+      cf.style.transition = "opacity 0.7s";
       cf.style.opacity = 0;
-      setTimeout(()=>{ cf.remove(); this.run(); }, 1000);
-    }, 1400);
+      setTimeout(()=>{ cf.remove(); this.run(); }, 700);
+    }, showMs);
   },
 
   renderLine(step){

@@ -33,19 +33,19 @@ window.Prologue = (function(){
     { type:"prologue_narr", text:"你没有多想。" },
     { type:"prologue_narr", text:"" },
     { type:"prologue_voice", text:"修复师，欢迎登舰。" },
-    { type:"prologue_voice", text:"今晚为你分配的档案是 A-07。" },
-    { type:"prologue_voice", text:"——一位 12 年前自愿封存自己的女科学家。" },
-    { type:"prologue_voice", text:"她自我封存的原因，档案没有记录。" },
-    { type:"prologue_voice", text:"你的任务，是协助她重新整理记忆。" },
-    { type:"prologue_voice", text:"——记住，你只是来修复她的。" },
-    { type:"prologue_voice", text:"她不是来等你的。" },
-    { type:"prologue_voice", text:"你也不是她在等的人。" },
+    { type:"prologue_voice", text:"今晚有三份档案在等待你的选择。" },
+    { type:"prologue_voice", text:"——三位 10 年前自愿封存自己的乘客。" },
+    { type:"prologue_voice", text:"他们各自封存的原因，档案里没有完整记录。" },
+    { type:"prologue_voice", text:"你的任务，是协助其中一位重新整理记忆。" },
+    { type:"prologue_voice", text:"——记住，你只是来修复他们的。" },
+    { type:"prologue_voice", text:"他们不是来等你的。" },
+    { type:"prologue_voice", text:"你也不是他们在等的人。" },
     { type:"prologue_voice", text:"" },
-    { type:"prologue_choice", text:"你点了头。系统问你：要从哪一位档案开始？",
+    { type:"prologue_choice", text:"系统在你眼前展开三份档案。请选择今晚要进入的人。",
       options:[
-        { label:"A-07 · 千夜 / 28 / 银发科学家", route:"qianye" },
-        { label:"B-13 · 云璃 / 26 / 红发机械师", route:"yunli" },
-        { label:"C-21 · 音 / 30 / 银发档案守护者", route:"yin" }
+        { label:"千夜", route:"qianye", archive:"A-07", meta:"28 岁 / 银发 / 神经科学家", tag:"主线推荐 · 完整 13 章 + 多结局", img:"assets/portraits/qianye.png" },
+        { label:"云璃", route:"yunli", archive:"B-13", meta:"26 岁 / 红发 / 机械工程师", tag:"开发中 · 当前可体验序章", img:"assets/portraits/yunli.png" },
+        { label:"音", route:"yin", archive:"C-21", meta:"30 岁 / 银发 / 档案守护者", tag:"开发中 · 当前可体验序章", img:"assets/portraits/yin.png" }
       ]
     },
     { type:"prologue_narr", text:"——你做出了选择。" },
@@ -170,11 +170,16 @@ window.Prologue = (function(){
     else if (step.type === "prologue_choice"){
       html = `<div class="pl-choice">
         <div class="pl-choice-q">${escapeHtml(step.text)}</div>
-        <div class="pl-choice-rows">
+        <div class="pl-route-cards">
           ${step.options.map(o =>
-            `<div class="pl-choice-row" data-route="${o.route}">
-              <span class="pl-choice-arrow">›</span>
-              <span class="pl-choice-label">${escapeHtml(o.label)}</span>
+            `<div class="pl-route-card" data-route="${o.route}">
+              <div class="prc-img"><img src="${o.img || ''}" alt=""/></div>
+              <div class="prc-info">
+                <div class="prc-archive">档案 ${escapeHtml(o.archive || '')}</div>
+                <div class="prc-name">${escapeHtml(o.label)}</div>
+                <div class="prc-meta">${escapeHtml(o.meta || '')}</div>
+                <div class="prc-tag">${escapeHtml(o.tag || '')}</div>
+              </div>
             </div>`).join("")}
         </div>
       </div>`;
@@ -183,8 +188,7 @@ window.Prologue = (function(){
     wrap.innerHTML = html;
 
     if (step.type === "prologue_choice"){
-      // 等待用户点选
-      wrap.querySelectorAll(".pl-choice-row").forEach(row => {
+      wrap.querySelectorAll(".pl-route-card").forEach(row => {
         row.addEventListener("click", e => {
           e.stopPropagation();
           chosenRoute = row.dataset.route;
@@ -192,10 +196,9 @@ window.Prologue = (function(){
           setTimeout(() => {
             layer.classList.remove("anim-busy");
             nextStep();
-          }, 350);
+          }, 380);
         });
       });
-      // 不自动推进
       return;
     }
 
@@ -208,14 +211,11 @@ window.Prologue = (function(){
 
   function finish(){
     const layer = document.getElementById("prologueLayer");
+    // 立即触发回调（main.js 会切换到 game-screen），再 fadeOut prologue 层
+    if (onComplete) onComplete(chosenRoute || "qianye");
     if (layer){
       layer.classList.add("fading-out");
-      setTimeout(() => {
-        layer.remove();
-        if (onComplete) onComplete(chosenRoute || "qianye");
-      }, 600);
-    } else {
-      if (onComplete) onComplete(chosenRoute || "qianye");
+      setTimeout(() => layer.remove(), 600);
     }
   }
 

@@ -286,11 +286,11 @@
     Prologue.start((chosenRoute) => {
       save.prologueDone = true;
       Save.store(save);
-      // 直接进入选定的支线
       if (chosenRoute){
         save.currentRoute = chosenRoute;
         save.stepIndex = 0;
         Save.store(save);
+        // 先切到 game-screen 再让 prologue fadeOut，避免闪标题屏
         UI.switchScreen("game-screen");
         Engine.run();
       } else {
