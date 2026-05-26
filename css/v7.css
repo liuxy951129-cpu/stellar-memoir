@@ -96,7 +96,7 @@ h2, h3, .pl-title-main, .pl-keyline {
   border-bottom-left-radius: 12px;
   border-bottom-right-radius: 12px;
   transform-origin: left;
-  animation: termBar 3s linear forwards;
+  animation: termBar 5s linear forwards;
 }
 @keyframes termIn {
   0% { opacity: 0; transform: translateX(40px) scale(.9); }

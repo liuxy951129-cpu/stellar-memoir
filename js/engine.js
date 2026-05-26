@@ -359,7 +359,7 @@ window.Engine = {
     setTimeout(()=>{
       card.classList.add("term-out");
       setTimeout(()=> card.remove(), 450);
-    }, 3000);
+    }, 5000);
   },
   _esc(s){ return String(s||"").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"})[c]); },
 
