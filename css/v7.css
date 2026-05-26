@@ -470,3 +470,104 @@ h2, h3, .pl-title-main, .pl-keyline {
   border-radius: 10px;
   border: 1px solid rgba(255,158,197,.3);
 }
+
+/* ============= v7.3：首页参考未定事件簿排版 ============= */
+
+/* logo 缩到左上角小巧 */
+.title-top {
+  position: absolute !important;
+  left: 16px !important;
+  right: auto !important;
+  top: 84px !important;
+  align-items: flex-start !important;
+  padding: 0 !important;
+  max-width: 200px;
+  z-index: 5;
+}
+.title-top .title-sub {
+  display: none !important;
+}
+.title-top .title-logo {
+  width: 180px !important;
+  filter: drop-shadow(0 4px 14px rgba(0,0,0,.7)) brightness(1.2) !important;
+  margin: 0 !important;
+}
+.title-top .title-tag {
+  display: none !important;
+}
+
+/* 海报背景：让顶部更亮+底部留白渐变 */
+.title-poster {
+  background-size: cover !important;
+  background-position: center 35% !important;
+}
+.title-poster-mask {
+  background:
+    linear-gradient(180deg,
+      rgba(8,5,20,0.45) 0%,
+      rgba(8,5,20,0.15) 35%,
+      rgba(8,5,20,0.45) 60%,
+      rgba(8,5,20,0.92) 88%,
+      rgba(8,5,20,0.98) 100%) !important;
+}
+
+/* 海报上叠加大字标语（参考未定事件簿） */
+#title-screen .title-slogan {
+  position: absolute;
+  left: 0; right: 0;
+  bottom: 305px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 6;
+  pointer-events: none;
+  padding: 0 20px;
+}
+#title-screen .title-slogan .ts-line-1 {
+  font-family: var(--font-serif);
+  font-size: 26px;
+  font-weight: 500;
+  color: #fff;
+  letter-spacing: 8px;
+  text-shadow:
+    0 0 24px rgba(125,77,255,.55),
+    0 4px 14px rgba(0,0,0,.85);
+  margin-bottom: 8px;
+  background: linear-gradient(180deg, #fff 30%, #ff9ec5 90%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 8px rgba(255,255,255,.5)) drop-shadow(0 0 18px rgba(125,77,255,.4));
+}
+#title-screen .title-slogan .ts-line-2 {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 400;
+  color: rgba(255,255,255,.85);
+  letter-spacing: 14px;
+  text-shadow: 0 0 16px rgba(255,158,197,.5), 0 4px 10px rgba(0,0,0,.9);
+}
+#title-screen .title-slogan .ts-divider {
+  width: 80px; height: 1px;
+  background: linear-gradient(90deg, transparent, #ff9ec5, transparent);
+  margin: 12px 0 10px;
+  box-shadow: 0 0 8px rgba(255,158,197,.7);
+}
+#title-screen .title-slogan .ts-en {
+  font-family: var(--font-en);
+  font-style: italic;
+  font-size: 12px;
+  color: rgba(255,255,255,.5);
+  letter-spacing: 4px;
+  margin-top: 4px;
+}
+
+/* 按钮区上移避免压住标语，bottom 减小 */
+.title-wrap-v3 {
+  bottom: 140px !important;
+}
+
+/* 顶部资源/图标栏轻量化（不抢戏） */
+.title-top-bar {
+  background: linear-gradient(180deg, rgba(8,5,20,.55), transparent) !important;
+}
