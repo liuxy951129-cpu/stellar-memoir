@@ -574,3 +574,19 @@ h2, h3, .pl-title-main, .pl-keyline {
 .title-top-bar {
   background: linear-gradient(180deg, rgba(8,5,20,.55), transparent) !important;
 }
+
+/* ============= v7.5：移除场景背景上的色块/线阵装饰 ============= */
+/* 第一章舰桥的灰色椭圆舷窗 / 第四章舱内的红色方块沙发 / 空中花园的线阵 / 走廊的紫色光点线 / 档案库的网格——全部干掉 */
+.scene-deck::before,
+.scene-deck::after,
+.scene-corridor::before,
+.scene-corridor::after,
+.scene-cabin::before,
+.scene-cabin::after,
+.scene-garden::before,
+.scene-garden::after,
+.scene-archive::before,
+.scene-archive::after {
+  display: none !important;
+  content: none !important;
+}

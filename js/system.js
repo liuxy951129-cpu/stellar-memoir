@@ -54,12 +54,7 @@ window.Sys = {
   },
 
   consumeStamina(save, n){
-    if (save.stamina < n){
-      UI.toast("体力不足，等会儿再聊吧～");
-      return false;
-    }
-    save.stamina -= n;
-    if (save.stamina <= 0) save.lastStaminaTs = Date.now();
+    // v7.5: 已去掉体力限制，保留 UI 显示，永远返回 true
     return true;
   },
 
