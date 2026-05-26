@@ -23,11 +23,12 @@
   Gacha.render(save);
   UI.renderAffinityMini(save.affinity);
 
-  // 控制顶部资源条在 game-screen 时隐藏
+  // 控制顶部资源条在 game-screen 时隐藏（v3 把 top bar 内嵌到 title 屏，无需同步）
   function syncTopBar(){
+    const tb = document.getElementById("topBar");
+    if (!tb) return;
     const game = document.getElementById("game-screen");
-    document.getElementById("topBar").style.display =
-      (game.classList.contains("active")) ? "none" : "flex";
+    tb.style.display = game.classList.contains("active") ? "none" : "flex";
   }
   setInterval(syncTopBar, 200);
 
@@ -40,6 +41,21 @@
     const card = t.closest(".route-card");
     if (card){
       Engine.start(card.dataset.route);
+      return;
+    }
+    // 小游戏卡片点击
+    const miniCard = t.closest(".mini-card[data-mini]");
+    if (miniCard){
+      const game = miniCard.dataset.mini;
+      MiniGame.start(game, (reward)=>{
+        if (reward){
+          if (reward.coin) save.coin += reward.coin;
+          if (reward.aff) Object.keys(reward.aff).forEach(k => save.affinity[k] = (save.affinity[k]||0) + reward.aff[k]);
+          Sys.countTask(save, "miniCount", 1);
+          Save.store(save);
+          UI.renderTopBar(save);
+        }
+      });
       return;
     }
     // 商店送出按钮
@@ -107,6 +123,13 @@
         break;
       case "settings":
         UI.switchScreen("settings-screen");
+        break;
+      case "minigames":
+        UI.switchScreen("minigames-screen");
+        break;
+      case "profile":
+        UI.renderProfile(save);
+        UI.switchScreen("profile-screen");
         break;
       case "to-title":
         UI.renderRouteCards("routeCards", save);

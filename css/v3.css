@@ -1,0 +1,276 @@
+/* ===================== v3 重构样式 ===================== */
+
+/* 隐藏 v2 顶栏（v3 用 title 内置 bar） */
+#topBar { display: none !important; }
+
+/* ----- 标题屏 v3 ----- */
+.title-poster{
+  position:absolute;inset:0;
+  background-image:url("../assets/cover/main_poster.png");
+  background-size:cover;background-position:center;
+  filter:saturate(1.05);
+}
+.title-poster-mask{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse at 50% 30%, transparent 0%, rgba(6,8,26,.3) 50%, rgba(6,8,26,.85) 100%),
+    linear-gradient(180deg, rgba(6,8,26,.55) 0%, rgba(6,8,26,.2) 35%, rgba(6,8,26,.95) 100%);
+}
+
+.title-top-bar{
+  position:absolute;top:0;left:0;right:0;height:50px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 14px;z-index:5;
+  background:linear-gradient(180deg, rgba(6,8,26,.7), transparent);
+  backdrop-filter:blur(6px);
+}
+.title-resource{
+  display:flex;gap:10px;font-size:12px;color:#fff;letter-spacing:.05em;
+}
+.title-resource span{
+  padding:4px 10px;border-radius:14px;
+  background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.18);
+  display:flex;align-items:center;gap:4px;
+}
+.title-resource b{color:#ffd66b;font-weight:700;}
+.title-resource .rs-stam b{color:#3ad6ff;}
+.title-resource .rs-dia b{color:#ff77c8;}
+
+.title-icons{display:flex;gap:8px;}
+.ic-btn{
+  position:relative;width:36px;height:36px;border-radius:50%;
+  background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.2);
+  font-size:16px;display:flex;align-items:center;justify-content:center;
+  transition:transform .2s, background .2s;
+}
+.ic-btn:hover{background:rgba(125,77,255,.4);transform:translateY(-2px);}
+.ic-badge{
+  position:absolute;top:-4px;right:-4px;
+  min-width:16px;height:16px;border-radius:8px;padding:0 4px;
+  background:#ff3060;color:#fff;font-size:10px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+}
+.ic-badge[data-empty="true"]{display:none;}
+
+.title-wrap-v3{
+  position:absolute;left:0;right:0;top:0;bottom:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
+  padding:0 24px 200px;z-index:3;
+}
+.title-wrap-v3 .title-sub{
+  font-family:var(--font-en);
+  letter-spacing:.5em;font-size:12px;color:var(--c-cyan);
+  text-shadow:0 0 12px rgba(58,214,255,.7);margin-bottom:14px;
+}
+.title-wrap-v3 .title-main{
+  display:flex;flex-direction:column;align-items:center;gap:4px;margin-bottom:10px;
+}
+.title-wrap-v3 .title-main .cn{
+  font-size:54px;font-weight:900;letter-spacing:.18em;
+  background:linear-gradient(180deg,#fff 0%,#d2c4ff 50%,#7d4dff 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 0 24px rgba(125,77,255,.55));
+}
+.title-wrap-v3 .title-main .en{
+  font-family:var(--font-en);font-style:italic;letter-spacing:.3em;
+  font-size:18px;color:#ffd9ee;text-shadow:0 0 14px rgba(255,119,200,.6);
+}
+.title-wrap-v3 .title-tag{
+  color:#dfe6ff;margin-bottom:30px;letter-spacing:.16em;font-size:12px;
+  text-shadow:0 1px 4px rgba(0,0,0,.6);
+}
+
+.title-menu-core{
+  display:flex;flex-direction:column;gap:10px;width:260px;
+}
+
+.title-dock{
+  position:absolute;bottom:30px;left:50%;transform:translateX(-50%);
+  display:flex;gap:10px;z-index:6;
+  padding:8px 12px;border-radius:50px;
+  background:rgba(6,8,26,.65);
+  border:1px solid rgba(125,77,255,.45);
+  backdrop-filter:blur(10px);
+  box-shadow:0 12px 40px rgba(0,0,0,.5);
+}
+.dock-btn{
+  width:60px;height:60px;border-radius:50%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:linear-gradient(180deg, rgba(125,77,255,.25), rgba(58,214,255,.15));
+  border:1px solid rgba(255,255,255,.2);
+  transition:transform .2s, box-shadow .2s;
+  gap:2px;
+}
+.dock-btn:hover{transform:translateY(-4px);box-shadow:0 8px 20px rgba(125,77,255,.5);}
+.dock-emoji{font-size:22px;line-height:1;}
+.dock-name{font-size:9px;letter-spacing:.1em;color:#fff;}
+
+.title-credit{
+  position:absolute;bottom:8px;left:50%;transform:translateX(-50%);
+  color:#5d6394;font-size:10px;letter-spacing:.2em;z-index:5;
+}
+
+/* ----- 圆形 HUD（剧情页右上角） ----- */
+.round-hud{
+  position:absolute;top:60px;right:14px;
+  width:100px;height:100px;z-index:8;
+  pointer-events:none;
+}
+.rh-svg{
+  position:absolute;inset:0;width:100%;height:100%;
+  transform:rotate(-90deg);
+}
+.rh-bg-ring{
+  fill:rgba(0,0,0,.55);
+  stroke:rgba(255,255,255,.15);stroke-width:2;
+}
+.rh-aff-ring{
+  fill:none;
+  stroke:url(#aff-grad);stroke-width:5;
+  stroke-linecap:round;
+  transition:stroke-dasharray .5s ease;
+}
+.rh-cg-ring{
+  fill:none;
+  stroke:#3ad6ff;stroke-width:3;
+  stroke-linecap:round;opacity:.85;
+  transition:stroke-dasharray .5s ease;
+}
+.rh-center{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  text-align:center;
+}
+.rh-aff-num{
+  font-size:22px;font-weight:900;
+  background:linear-gradient(180deg,#fff,#ffd66b);
+  -webkit-background-clip:text;color:transparent;
+  text-shadow:0 0 8px rgba(255,214,107,.5);
+}
+.rh-aff-label{font-size:9px;color:#ffd9ee;letter-spacing:.2em;}
+.rh-stage{
+  position:absolute;top:-8px;left:50%;transform:translateX(-50%);
+  padding:3px 10px;border-radius:10px;
+  background:linear-gradient(135deg,#ff77c8,#ffd66b);
+  font-size:10px;letter-spacing:.2em;color:#fff;font-weight:700;
+  box-shadow:0 4px 10px rgba(255,119,200,.5);
+  white-space:nowrap;
+}
+.rh-cg-num{
+  position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);
+  padding:2px 8px;border-radius:8px;
+  background:rgba(0,0,0,.6);
+  font-size:9px;letter-spacing:.1em;color:#3ad6ff;
+  border:1px solid rgba(58,214,255,.3);
+  white-space:nowrap;
+}
+
+/* ----- 异常 banner ----- */
+.anomaly-banner{
+  position:absolute;top:130px;left:14px;
+  padding:6px 12px;border-radius:14px;
+  background:rgba(60,8,8,.85);
+  border:1px solid #ff3060;
+  color:#ffd0d0;font-size:11px;letter-spacing:.1em;
+  z-index:8;
+  display:flex;align-items:center;gap:6px;
+  animation:anomalyPulse 1.6s ease-in-out infinite;
+}
+.ab-icon{color:#ff3060;}
+@keyframes anomalyPulse{
+  0%,100%{box-shadow:0 0 0 rgba(255,48,96,0);}
+  50%{box-shadow:0 0 16px rgba(255,48,96,.7);}
+}
+
+/* ----- HUD 顶部精简（去掉旧 affinity-mini） ----- */
+.affinity-mini{display:none !important;}
+.hud-top{padding-right:120px;} /* 给右上角圆形 HUD 留位 */
+
+/* ----- 立绘修正：透明 PNG 不需要灰色背景 ----- */
+.portrait{
+  width:min(380px,72%);
+  height:72%;
+  bottom:160px;     /* 留出对话框 + tool bar 高度 */
+  filter:drop-shadow(0 12px 40px rgba(0,0,0,.55));
+}
+.portrait img{
+  width:100%;height:100%;object-fit:contain;object-position:bottom center;
+}
+
+/* 玩家剪影特殊样式 */
+.player-portrait{
+  position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  width:min(420px,70%);height:90%;
+  filter:drop-shadow(0 8px 30px rgba(125,77,255,.7));
+  opacity:0;
+  transition:opacity .8s;
+}
+.player-portrait.in{opacity:1;}
+.player-portrait img{width:100%;height:100%;object-fit:contain;object-position:bottom center;}
+
+/* ----- 小游戏中心列表 ----- */
+.mini-list{
+  position:absolute;left:0;right:0;top:160px;bottom:0;
+  overflow-y:auto;padding:0 16px 30px;
+}
+.mini-card{
+  margin-bottom:12px;height:100px;border-radius:14px;
+  position:relative;overflow:hidden;cursor:pointer;
+  display:flex;align-items:center;
+  border:1px solid rgba(255,255,255,.15);
+  transition:transform .25s, box-shadow .25s;
+}
+.mini-card:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(125,77,255,.4);}
+.mini-bg{position:absolute;inset:0;}
+.mini-info{
+  position:relative;padding:18px 22px;
+  background:linear-gradient(90deg, rgba(0,0,0,.55), transparent);
+  width:100%;color:#fff;
+}
+.mini-name{font-size:18px;font-weight:700;letter-spacing:.15em;}
+.mini-desc{font-size:11px;color:rgba(255,255,255,.85);letter-spacing:.1em;margin-top:4px;}
+
+/* ----- 玩家档案页 ----- */
+.profile-wrap{
+  position:absolute;left:0;right:0;top:140px;bottom:0;
+  overflow-y:auto;padding:20px;
+  display:flex;flex-direction:column;align-items:center;
+}
+.profile-portrait{
+  width:200px;height:240px;border-radius:14px;overflow:hidden;
+  background:#0b0f2c;margin-bottom:14px;position:relative;
+  border:1px solid rgba(125,77,255,.4);
+}
+.profile-portrait img{width:100%;height:100%;object-fit:cover;object-position:center top;}
+.profile-info{text-align:center;color:#fff;max-width:480px;}
+.profile-info h3{font-size:18px;letter-spacing:.25em;margin-bottom:6px;color:#ffd9ee;}
+.profile-info p{color:#aab1d6;line-height:1.7;letter-spacing:.05em;margin-bottom:6px;font-size:13px;}
+.profile-row{
+  display:flex;justify-content:space-between;width:100%;max-width:380px;margin-top:4px;
+  padding:6px 0;border-bottom:1px solid rgba(255,255,255,.08);font-size:12px;
+}
+.profile-row span:first-child{color:#aab1d6;letter-spacing:.1em;}
+.profile-row span:last-child{color:#fff;}
+.profile-clue{
+  margin-top:18px;padding:14px 18px;border-radius:12px;
+  background:rgba(60,8,8,.45);border:1px solid rgba(255,48,96,.4);
+  font-size:12px;color:#ffd0d0;line-height:1.7;letter-spacing:.05em;
+  max-width:480px;
+}
+.profile-clue h4{font-size:13px;letter-spacing:.25em;color:#ff77a8;margin-bottom:6px;}
+
+/* ----- route-card 头像 object-fit ----- */
+.route-card .rc-bg img{
+  object-fit:contain !important;
+  object-position:center 25% !important;
+  background:linear-gradient(180deg, #1a1547, #0a0d28);
+}
+
+/* 移动端 */
+@media (max-width:480px){
+  .title-wrap-v3{padding-bottom:180px;}
+  .title-wrap-v3 .title-main .cn{font-size:42px;}
+  .dock-btn{width:50px;height:50px;}
+  .dock-emoji{font-size:18px;}
+  .round-hud{width:84px;height:84px;top:54px;}
+  .rh-aff-num{font-size:18px;}
+}

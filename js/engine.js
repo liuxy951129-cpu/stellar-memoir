@@ -21,11 +21,13 @@ window.Engine = {
     this.log = [];
     Save.store(this.save);
     UI.switchScreen("game-screen");
+    UI.renderRoundHUD(this.save);
     this.run();
   },
 
   resume(){
     UI.switchScreen("game-screen");
+    UI.renderRoundHUD(this.save);
     this.run();
   },
 
@@ -55,6 +57,31 @@ window.Engine = {
         this.showChapter(step);
         this.save.stepIndex++;
         return;
+      }
+      if (t === "anomaly"){
+        UI.showAnomaly(step.text);
+        if (step.clue) Anomaly.recordClue(this.save, step.clue);
+        Save.store(this.save);
+        this.save.stepIndex++;
+        continue;
+      }
+      if (t === "player_silhouette"){
+        Portrait.setStage(document.getElementById("charStage"), "player_silhouette", "calm");
+        document.getElementById("speaker").className = "speaker narrator";
+        document.getElementById("speaker").textContent = "???";
+        document.getElementById("dialogText").textContent = step.text || "";
+        document.getElementById("choiceBox").innerHTML = "";
+        this.save.stepIndex++;
+        Save.store(this.save);
+        return;
+      }
+      if (t === "player_reveal"){
+        this.save.flags.player_revealed = true;
+        Portrait.setStage(document.getElementById("charStage"), "player", "smile");
+        UI.toast("✦ 你认出了你自己");
+        Save.store(this.save);
+        this.save.stepIndex++;
+        continue;
       }
       if (t === "narr" || t === "line"){
         this.renderLine(step);
@@ -90,7 +117,7 @@ window.Engine = {
             if (reward.aff) Object.keys(reward.aff).forEach(k => this.save.affinity[k] = (this.save.affinity[k]||0) + reward.aff[k]);
             Sys.countTask(this.save, "miniCount", 1);
             Save.store(this.save);
-            UI.renderAffinityMini(this.save.affinity);
+            UI.renderRoundHUD(this.save);
           }
           this.run();
         });
@@ -252,7 +279,7 @@ window.Engine = {
         }
       });
       UI.toast(this._affToast(opt.aff));
-      UI.renderAffinityMini(this.save.affinity);
+      UI.renderRoundHUD(this.save);
     }
     if (opt.flag) this.save.flags[opt.flag] = true;
     if (opt.unlock){
@@ -275,7 +302,7 @@ window.Engine = {
           if (reward.aff) Object.keys(reward.aff).forEach(k => this.save.affinity[k] = (this.save.affinity[k]||0) + reward.aff[k]);
           Sys.countTask(this.save, "miniCount", 1);
           Save.store(this.save);
-          UI.renderAffinityMini(this.save.affinity);
+          UI.renderRoundHUD(this.save);
         }
         this.run();
       });
@@ -320,6 +347,10 @@ window.Engine = {
     this.save.coin += 200;
     this.save.diamond += 5;
     Sys.countTask(this.save, "routeFinished", 1);
+    // 触发玩家暗线邮件（仅在主线 HE 时）
+    if (['qianye','yunli','yin'].includes(route) && finalTag === "HE"){
+      Anomaly.checkAndPushOnRouteFinish(this.save, route);
+    }
     Save.store(this.save);
 
     const card = document.createElement("div");

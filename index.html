@@ -8,46 +8,72 @@
 <link rel="stylesheet" href="css/character.css" />
 <link rel="stylesheet" href="css/ui.css" />
 <link rel="stylesheet" href="css/v2.css" />
+<link rel="stylesheet" href="css/v3.css" />
 </head>
 <body>
 <div id="app">
 
-  <!-- 顶部资源条（在主页/抽卡/邮件/任务/商店共用） -->
-  <div class="top-bar" id="topBar">
-    <div class="tb-left">
-      <span class="tb-stam">⚡ <b id="topStamina">30/30</b></span>
-    </div>
-    <div class="tb-right">
-      <span>★ <b id="topCoin">300</b></span>
-      <span>♦ <b id="topDiamond">10</b></span>
-    </div>
-  </div>
-
-  <!-- 标题屏 -->
+  <!-- 标题屏 v3 -->
   <section id="title-screen" class="screen active">
-    <div class="bg-stars"></div>
-    <div class="bg-nebula"></div>
+    <!-- 海报背景 -->
+    <div class="title-poster"></div>
+    <div class="title-poster-mask"></div>
     <div class="bg-shooting"></div>
-    <div class="title-wrap">
+
+    <!-- 顶部 icon bar（设置 + 邮件 + 任务） -->
+    <div class="title-top-bar">
+      <div class="title-resource">
+        <span class="rs-stam">⚡<b id="topStamina">30</b></span>
+        <span class="rs-coin">★<b id="topCoin">300</b></span>
+        <span class="rs-dia">♦<b id="topDiamond">10</b></span>
+      </div>
+      <div class="title-icons">
+        <button class="ic-btn" data-action="tasks" title="任务">📋</button>
+        <button class="ic-btn" data-action="mailbox" title="邮件">
+          📩<span class="ic-badge" id="mailBadge">0</span>
+        </button>
+        <button class="ic-btn" data-action="settings" title="设置">⚙️</button>
+      </div>
+    </div>
+
+    <!-- 标题 -->
+    <div class="title-wrap-v3">
       <div class="title-sub">VISUAL NOVEL · 星舰记忆修复局</div>
       <h1 class="title-main">
         <span class="cn">星海拾遗</span>
         <span class="en">Stellar Memoir</span>
       </h1>
       <div class="title-tag">在遗忘的银河里，重新爱你一次。</div>
-      <div class="title-menu">
+
+      <!-- 中央 3 主按钮 -->
+      <div class="title-menu-core">
         <button class="btn-primary" data-action="start-new">开 始 故 事</button>
         <button class="btn-ghost" data-action="continue">继 续</button>
-        <button class="btn-ghost" data-action="tasks">每 日 任 务</button>
-        <button class="btn-ghost" data-action="mailbox">邮 件 <span class="mail-badge" id="mailBadge">0</span></button>
-        <button class="btn-ghost" data-action="shop">送 礼 商 店</button>
         <button class="btn-ghost" data-action="gallery">回 忆 相 册</button>
-        <button class="btn-ghost" data-action="gacha">记 忆 抽 取</button>
-        <button class="btn-ghost" data-action="settings">设 置</button>
       </div>
-      <div class="title-foot">v2.0 · 3 主线 × 3 章 + 日常 / 任务 / 送礼 / 邮件 / 小游戏</div>
     </div>
-    <div class="title-credit">© 2026 Stellar Memoir Studio · 致每一位被光遗忘的人</div>
+
+    <!-- 底部 dock -->
+    <div class="title-dock">
+      <button class="dock-btn" data-action="shop">
+        <span class="dock-emoji">💝</span>
+        <span class="dock-name">送礼</span>
+      </button>
+      <button class="dock-btn" data-action="gacha">
+        <span class="dock-emoji">🎴</span>
+        <span class="dock-name">抽取</span>
+      </button>
+      <button class="dock-btn" data-action="minigames">
+        <span class="dock-emoji">🎮</span>
+        <span class="dock-name">小游戏</span>
+      </button>
+      <button class="dock-btn" data-action="profile">
+        <span class="dock-emoji">👤</span>
+        <span class="dock-name">档案</span>
+      </button>
+    </div>
+
+    <div class="title-credit">v3.0 · 致每一位被光遗忘的人 · © 2026</div>
   </section>
 
   <!-- 角色选择 -->
@@ -56,7 +82,7 @@
     <div class="route-header">
       <div class="route-back" data-action="to-title">‹ 返回</div>
       <h2>选择今日要修复的人</h2>
-      <p class="route-tip">每条主线包含 3 天剧情 + 日常 + 4 种结局（HE/NE/TE）</p>
+      <p class="route-tip">每条主线包含 3 天剧情 + 日常 · 隐藏：你也是其中一员</p>
     </div>
     <div class="route-cards" id="routeCards"></div>
   </section>
@@ -66,16 +92,45 @@
     <div class="scene-layer" id="sceneLayer"></div>
     <div class="scene-fx" id="sceneFx"></div>
     <div class="char-stage" id="charStage"></div>
+
+    <!-- 顶部 HUD -->
     <div class="hud-top">
       <div class="hud-left">
         <div class="day-tag" id="dayTag">Day 1</div>
         <div class="chapter-tag" id="chapterTag">第一章 · 醒来</div>
       </div>
       <div class="hud-right">
-        <div class="affinity-mini" id="affinityMini"></div>
         <button class="hud-btn" data-action="menu">≡</button>
       </div>
     </div>
+
+    <!-- 右上角圆形 HUD -->
+    <div class="round-hud" id="roundHud">
+      <div class="rh-stage" id="rhStage">陌生</div>
+      <svg class="rh-svg" viewBox="0 0 120 120">
+        <defs>
+          <linearGradient id="aff-grad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#ff77c8"/>
+            <stop offset="100%" stop-color="#ffd66b"/>
+          </linearGradient>
+        </defs>
+        <circle class="rh-bg-ring" cx="60" cy="60" r="52"/>
+        <circle class="rh-aff-ring" cx="60" cy="60" r="52" id="rhAffRing"/>
+        <circle class="rh-cg-ring" cx="60" cy="60" r="40" id="rhCgRing"/>
+      </svg>
+      <div class="rh-center">
+        <div class="rh-aff-num" id="rhAffNum">0</div>
+        <div class="rh-aff-label">好感</div>
+      </div>
+      <div class="rh-cg-num" id="rhCgNum">0/13</div>
+    </div>
+
+    <!-- 异常事件提示（玩家暗线触发用） -->
+    <div class="anomaly-banner" id="anomalyBanner" style="display:none;">
+      <span class="ab-icon">⚠</span>
+      <span class="ab-text">系统异常 · A-08 信号波动</span>
+    </div>
+
     <div class="dialog-box" id="dialogBox">
       <div class="speaker" id="speaker">？？？</div>
       <div class="dialog-text" id="dialogText"></div>
@@ -97,7 +152,7 @@
     <div class="sub-header">
       <div class="route-back" data-action="to-title">‹ 返回</div>
       <h2>邮件中心</h2>
-      <p class="route-tip">来自星舰系统与三位乘客的私信</p>
+      <p class="route-tip">来自星舰系统、三位乘客 · 与，某位陌生人</p>
     </div>
     <div class="mail-list" id="mailList"></div>
   </section>
@@ -124,13 +179,57 @@
     <div class="shop-list" id="shopList"></div>
   </section>
 
+  <!-- 小游戏中心 -->
+  <section id="minigames-screen" class="screen">
+    <div class="bg-stars"></div>
+    <div class="sub-header">
+      <div class="route-back" data-action="to-title">‹ 返回</div>
+      <h2>小游戏中心</h2>
+      <p class="route-tip">每天可重复玩，赢得星币 + 好感</p>
+    </div>
+    <div class="mini-list">
+      <div class="mini-card" data-mini="qy">
+        <div class="mini-bg" style="background:linear-gradient(135deg,#5b6df0,#a99dff);"></div>
+        <div class="mini-info">
+          <div class="mini-name">记忆碎片连线</div>
+          <div class="mini-desc">2×4 翻牌配对 · 千夜 +2</div>
+        </div>
+      </div>
+      <div class="mini-card" data-mini="yl">
+        <div class="mini-bg" style="background:linear-gradient(135deg,#ff77c8,#ffd66b);"></div>
+        <div class="mini-info">
+          <div class="mini-name">节拍踩点</div>
+          <div class="mini-desc">D F J K 节奏键 · 云璃 +2</div>
+        </div>
+      </div>
+      <div class="mini-card" data-mini="yin">
+        <div class="mini-bg" style="background:linear-gradient(135deg,#3ad6ff,#1a3a5f);"></div>
+        <div class="mini-info">
+          <div class="mini-name">凝视反应</div>
+          <div class="mini-desc">颜色对应键 · 银 +2</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 玩家档案 -->
+  <section id="profile-screen" class="screen">
+    <div class="bg-stars"></div>
+    <div class="sub-header">
+      <div class="route-back" data-action="to-title">‹ 返回</div>
+      <h2>修复师档案</h2>
+      <p class="route-tip">关于你自己的一切</p>
+    </div>
+    <div class="profile-wrap" id="profileWrap"></div>
+  </section>
+
   <!-- 回忆相册 -->
   <section id="gallery-screen" class="screen">
     <div class="bg-stars"></div>
     <div class="gal-header">
       <div class="route-back" data-action="to-title">‹ 返回</div>
       <h2>回忆相册</h2>
-      <p class="route-tip">已收集 <span id="galCount">0</span> / 12 段记忆碎片</p>
+      <p class="route-tip">已收集 <span id="galCount">0</span> / 13 段记忆碎片</p>
     </div>
     <div class="gallery-grid" id="galleryGrid"></div>
   </section>
@@ -206,19 +305,20 @@
 
 </div>
 
-<script src="js/data.story.js"></script>
-<script src="js/data.routes.js"></script>
-<script src="js/data.gacha.js"></script>
-<script src="js/data.gifts.js"></script>
-<script src="js/portrait.js"></script>
-<script src="js/scene.js"></script>
-<script src="js/system.js"></script>
-<script src="js/ui.js"></script>
-<script src="js/save.js"></script>
-<script src="js/gallery.js"></script>
-<script src="js/gacha.js"></script>
-<script src="js/minigame.js"></script>
-<script src="js/engine.js"></script>
-<script src="js/main.js"></script>
+<script charset="utf-8" src="js/data.story.js"></script>
+<script charset="utf-8" src="js/data.routes.js"></script>
+<script charset="utf-8" src="js/data.gacha.js"></script>
+<script charset="utf-8" src="js/data.gifts.js"></script>
+<script charset="utf-8" src="js/portrait.js"></script>
+<script charset="utf-8" src="js/scene.js"></script>
+<script charset="utf-8" src="js/ui.js"></script>
+<script charset="utf-8" src="js/system.js"></script>
+<script charset="utf-8" src="js/save.js"></script>
+<script charset="utf-8" src="js/gallery.js"></script>
+<script charset="utf-8" src="js/gacha.js"></script>
+<script charset="utf-8" src="js/minigame.js"></script>
+<script charset="utf-8" src="js/anomaly.js"></script>
+<script charset="utf-8" src="js/engine.js"></script>
+<script charset="utf-8" src="js/main.js"></script>
 </body>
 </html>
