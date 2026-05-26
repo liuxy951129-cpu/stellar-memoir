@@ -223,7 +223,13 @@ h2, h3, .pl-title-main, .pl-keyline {
 }
 
 /* ===== 5. 修复进度详情模态 ===== */
-.rh-rep-num { cursor: pointer; transition: all .2s; }
+/* 关键修复：父级 .round-hud 设了 pointer-events:none，这里强制恢复 */
+.rh-rep-num {
+  cursor: pointer;
+  transition: all .2s;
+  pointer-events: auto !important;
+  z-index: 100;
+}
 .rh-rep-num:hover { transform: translateX(-50%) scale(1.08); box-shadow: 0 0 12px rgba(255,214,107,.6); }
 
 .repair-panel {
@@ -348,3 +354,119 @@ h2, h3, .pl-title-main, .pl-keyline {
 /* ===== 6. 字体顺手优化 prologue ===== */
 .pl-narr { font-family: var(--font-serif); font-weight: 350; }
 .pl-voice { font-family: var(--font-en-sans); }
+
+/* ===== v7.2: 抽卡分类标签 + 详情模态 ===== */
+.gacha-card .cat-tag {
+  position: absolute;
+  top: 8px; right: 8px;
+  font-size: 10px;
+  background: rgba(0,0,0,.5);
+  border: 1px solid rgba(255,255,255,.3);
+  border-radius: 8px;
+  padding: 2px 6px;
+  color: #fff;
+  letter-spacing: .5px;
+}
+
+.gacha-item-modal {
+  position: fixed; inset: 0;
+  background: radial-gradient(ellipse at 50% 30%, rgba(45,30,80,.92), rgba(8,5,20,.97));
+  z-index: 2000;
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+  backdrop-filter: blur(10px);
+  animation: gimIn .4s ease;
+}
+@keyframes gimIn { from{opacity:0;} to{opacity:1;} }
+.gacha-item-modal .gi-card {
+  width: 100%; max-width: 520px;
+  background: linear-gradient(180deg, rgba(35,25,70,.95), rgba(15,10,30,.98));
+  border: 1px solid rgba(255,158,197,.5);
+  border-radius: 20px;
+  padding: 28px 24px;
+  box-shadow: 0 30px 80px rgba(0,0,0,.7);
+  color: #fff;
+  font-family: var(--font-sans);
+  animation: gimCardIn .55s cubic-bezier(.16,.95,.3,1.1);
+}
+@keyframes gimCardIn {
+  from { opacity:0; transform: scale(.85); }
+  to { opacity:1; transform: scale(1); }
+}
+.gi-card.rk-ssr { border-color: #ffd66b; box-shadow: 0 0 60px rgba(255,214,107,.35), 0 30px 80px rgba(0,0,0,.7); }
+.gi-card.rk-sr  { border-color: #a99dff; box-shadow: 0 0 40px rgba(169,157,255,.3), 0 30px 80px rgba(0,0,0,.7); }
+.gi-head {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 12px;
+}
+.gi-rk {
+  font-family: var(--font-en);
+  font-weight: 700;
+  font-size: 18px;
+  padding: 4px 14px;
+  border-radius: 14px;
+  letter-spacing: 2px;
+  background: linear-gradient(135deg, #ffd66b, #ff9ec5);
+  color: #2a1d0a;
+}
+.gi-card.rk-sr .gi-rk { background: linear-gradient(135deg, #a99dff, #7d4dff); color: #fff; }
+.gi-cat {
+  font-size: 12px;
+  color: rgba(255,255,255,.7);
+  letter-spacing: 1px;
+}
+.gi-name {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 8px;
+  letter-spacing: 2px;
+}
+.gi-desc {
+  font-size: 13px;
+  color: rgba(255,255,255,.65);
+  margin-bottom: 18px;
+  font-style: italic;
+  border-left: 2px solid rgba(255,158,197,.5);
+  padding-left: 10px;
+}
+.gi-body {
+  font-size: 14px;
+  line-height: 2;
+  color: rgba(255,255,255,.92);
+  background: rgba(0,0,0,.3);
+  border-radius: 12px;
+  padding: 18px 16px;
+  margin-bottom: 18px;
+  max-height: 48vh;
+  overflow-y: auto;
+  letter-spacing: .5px;
+  white-space: pre-wrap;
+}
+.gi-close {
+  display: block; margin: 0 auto;
+  padding: 10px 30px;
+  background: linear-gradient(135deg, #ff9ec5, #7d4dff);
+  border: none;
+  border-radius: 24px;
+  color: #fff;
+  font-size: 13px;
+  letter-spacing: 3px;
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(125,77,255,.4);
+  font-family: var(--font-sans);
+}
+.gi-close:hover { transform: translateY(-2px); }
+
+/* gacha-card 把 cat-tag 容纳 */
+.gacha-card { position: relative; }
+
+/* 抽卡列表（如果要展示已抽到的内容） */
+.gacha-stat .stat-mini {
+  font-size: 11px;
+  background: rgba(255,158,197,.18);
+  padding: 4px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,158,197,.3);
+}
