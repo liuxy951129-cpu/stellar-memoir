@@ -22,12 +22,14 @@ window.Engine = {
     Save.store(this.save);
     UI.switchScreen("game-screen");
     UI.renderRoundHUD(this.save);
+    if (window.AudioMgr) AudioMgr.play(routeId);
     this.run();
   },
 
   resume(){
     UI.switchScreen("game-screen");
     UI.renderRoundHUD(this.save);
+    if (window.AudioMgr && this.save.currentRoute) AudioMgr.play(this.save.currentRoute);
     this.run();
   },
 

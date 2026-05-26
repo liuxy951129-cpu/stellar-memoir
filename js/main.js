@@ -10,6 +10,30 @@
   Sys.initSave(save);
   Engine.init(save, settings);
 
+  // BGM 初始化
+  if (window.AudioMgr){
+    AudioMgr.init();
+    // 同步设置控件初始值
+    setTimeout(()=>{
+      const en = document.getElementById("bgmEnabled");
+      const vol = document.getElementById("bgmVol");
+      if (en) en.checked = AudioMgr.getEnabled();
+      if (vol) vol.value = Math.round(AudioMgr.getVolume()*100);
+      if (en) en.addEventListener("change", e=>{
+        AudioMgr.setEnabled(e.target.checked);
+        if (e.target.checked){
+          const cur = save.currentRoute || (document.getElementById("title-screen")?.classList.contains("active") ? "title" : "title");
+          AudioMgr.play(cur);
+        }
+      });
+      if (vol) vol.addEventListener("input", e=>{
+        AudioMgr.setVolume(parseInt(e.target.value)/100);
+      });
+    }, 200);
+    // 主菜单默认放 title 主题（在用户首次手势后才会实际响）
+    AudioMgr.play("title");
+  }
+
   // 体力心跳
   setInterval(()=>{
     Sys.tickStamina(save);
@@ -133,6 +157,7 @@
       case "to-title":
         UI.renderRouteCards("routeCards", save);
         UI.switchScreen("title-screen");
+        if (window.AudioMgr) AudioMgr.play("title");
         break;
 
       case "menu":
@@ -295,8 +320,11 @@
   as.value = settings.autoSpeed;
   as.addEventListener("input", ()=>{ settings.autoSpeed = +as.value; Save.storeSettings(settings); });
   const bv = document.getElementById("bgmVol");
-  bv.value = settings.bgmVol;
-  bv.addEventListener("input", ()=>{ settings.bgmVol = +bv.value; Save.storeSettings(settings); });
+  // 注：BGM 音量改由 AudioMgr 统一管理（持久化到 localStorage.bgm_cfg），此处只兜底显示
+  if (bv && !window.AudioMgr) {
+    bv.value = settings.bgmVol;
+    bv.addEventListener("input", ()=>{ settings.bgmVol = +bv.value; Save.storeSettings(settings); });
+  }
   const ors = document.getElementById("onlyReadSkip");
   ors.checked = settings.onlyReadSkip;
   ors.addEventListener("change", ()=>{ settings.onlyReadSkip = ors.checked; Save.storeSettings(settings); });
@@ -317,12 +345,14 @@
         Save.store(save);
         // 先切到 game-screen 再让 prologue fadeOut，避免闪标题屏
         UI.switchScreen("game-screen");
+        if (window.AudioMgr) AudioMgr.play(chosenRoute);
         Engine.run();
       } else {
         UI.renderRouteCards("routeCards", save);
         UI.switchScreen("route-select");
       }
     });
+    if (window.AudioMgr) AudioMgr.play("prologue");
   }
 
   // 暴露给设置页"重看序章"
@@ -333,8 +363,10 @@
         save.stepIndex = 0;
         Save.store(save);
         UI.switchScreen("game-screen");
+        if (window.AudioMgr) AudioMgr.play(chosenRoute);
         Engine.run();
       }
     });
+    if (window.AudioMgr) AudioMgr.play("prologue");
   };
 })();
