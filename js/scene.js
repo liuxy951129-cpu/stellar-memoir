@@ -1,8 +1,18 @@
-/* 场景渲染 */
+/* 场景渲染（基于 AI 生成的背景图） */
 window.Scene = {
+  PATH: "assets/scenes/",
+  CGPATH: "assets/cg/",
+
   set(layer, fxLayer, sceneId, fx){
     layer.className = "scene-layer";
-    if (sceneId) layer.classList.add("scene-" + sceneId);
+    if (sceneId){
+      layer.classList.add("scene-" + sceneId);
+      layer.style.backgroundImage = `url("${this.PATH}${sceneId}.png")`;
+      layer.style.backgroundSize = "cover";
+      layer.style.backgroundPosition = "center";
+    } else {
+      layer.style.backgroundImage = "";
+    }
     fxLayer.innerHTML = "";
     if (fx === "rain")    fxLayer.innerHTML = `<div class="fx-rain"></div>`;
     if (fx === "petals")  fxLayer.innerHTML = `<div class="fx-petals"></div>`;
@@ -15,14 +25,11 @@ window.Scene = {
   },
 
   cgSurface(scene){
-    // 给 CG 用的简化背景
-    const map = {
-      deck:    "linear-gradient(180deg,#1a1547 0%,#06081a 100%)",
-      corridor:"linear-gradient(180deg,#1a1140 0%,#0a0a25 100%)",
-      cabin:   "linear-gradient(180deg,#3a1d5b 0%,#0a0721 100%)",
-      garden:  "linear-gradient(180deg,#1f3a5b 0%,#031020 100%)",
-      archive: "linear-gradient(180deg,#1a0d2c 0%,#06081a 100%)"
-    };
-    return map[scene] || map.deck;
+    return `url("${this.PATH}${scene || "deck"}.png") center/cover`;
+  },
+
+  cgImage(cgImgId){
+    // cgImgId 可能是 qianye_he / qianye 等，取 CG 图或 portrait 作 fallback
+    return `${this.CGPATH}${cgImgId}.png`;
   }
 };

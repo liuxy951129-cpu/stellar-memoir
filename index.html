@@ -7,9 +7,21 @@
 <link rel="stylesheet" href="css/main.css" />
 <link rel="stylesheet" href="css/character.css" />
 <link rel="stylesheet" href="css/ui.css" />
+<link rel="stylesheet" href="css/v2.css" />
 </head>
 <body>
 <div id="app">
+
+  <!-- 顶部资源条（在主页/抽卡/邮件/任务/商店共用） -->
+  <div class="top-bar" id="topBar">
+    <div class="tb-left">
+      <span class="tb-stam">⚡ <b id="topStamina">30/30</b></span>
+    </div>
+    <div class="tb-right">
+      <span>★ <b id="topCoin">300</b></span>
+      <span>♦ <b id="topDiamond">10</b></span>
+    </div>
+  </div>
 
   <!-- 标题屏 -->
   <section id="title-screen" class="screen active">
@@ -26,11 +38,14 @@
       <div class="title-menu">
         <button class="btn-primary" data-action="start-new">开 始 故 事</button>
         <button class="btn-ghost" data-action="continue">继 续</button>
+        <button class="btn-ghost" data-action="tasks">每 日 任 务</button>
+        <button class="btn-ghost" data-action="mailbox">邮 件 <span class="mail-badge" id="mailBadge">0</span></button>
+        <button class="btn-ghost" data-action="shop">送 礼 商 店</button>
         <button class="btn-ghost" data-action="gallery">回 忆 相 册</button>
         <button class="btn-ghost" data-action="gacha">记 忆 抽 取</button>
         <button class="btn-ghost" data-action="settings">设 置</button>
       </div>
-      <div class="title-foot">v1.0 · Day 1 ~ Day 3 已开放 · 共 3 条主线</div>
+      <div class="title-foot">v2.0 · 3 主线 × 3 章 + 日常 / 任务 / 送礼 / 邮件 / 小游戏</div>
     </div>
     <div class="title-credit">© 2026 Stellar Memoir Studio · 致每一位被光遗忘的人</div>
   </section>
@@ -41,19 +56,16 @@
     <div class="route-header">
       <div class="route-back" data-action="to-title">‹ 返回</div>
       <h2>选择今日要修复的人</h2>
-      <p class="route-tip">每条主线包含 3 天剧情 · 不同选择导向 4 种结局</p>
+      <p class="route-tip">每条主线包含 3 天剧情 + 日常 + 4 种结局（HE/NE/TE）</p>
     </div>
     <div class="route-cards" id="routeCards"></div>
   </section>
 
   <!-- 主游戏屏 -->
   <section id="game-screen" class="screen">
-    <!-- 背景层 -->
     <div class="scene-layer" id="sceneLayer"></div>
     <div class="scene-fx" id="sceneFx"></div>
-    <!-- 立绘层 -->
     <div class="char-stage" id="charStage"></div>
-    <!-- 顶部 HUD -->
     <div class="hud-top">
       <div class="hud-left">
         <div class="day-tag" id="dayTag">Day 1</div>
@@ -64,15 +76,12 @@
         <button class="hud-btn" data-action="menu">≡</button>
       </div>
     </div>
-    <!-- 对话框 -->
     <div class="dialog-box" id="dialogBox">
       <div class="speaker" id="speaker">？？？</div>
       <div class="dialog-text" id="dialogText"></div>
       <div class="dialog-arrow">▼</div>
     </div>
-    <!-- 选项 -->
     <div class="choice-box" id="choiceBox"></div>
-    <!-- 底部工具条 -->
     <div class="hud-bottom">
       <button class="tool-btn" data-action="auto">自动</button>
       <button class="tool-btn" data-action="skip">跳过</button>
@@ -80,6 +89,39 @@
       <button class="tool-btn" data-action="save">存档</button>
       <button class="tool-btn" data-action="load">读档</button>
     </div>
+  </section>
+
+  <!-- 邮件 -->
+  <section id="mailbox-screen" class="screen">
+    <div class="bg-stars"></div>
+    <div class="sub-header">
+      <div class="route-back" data-action="to-title">‹ 返回</div>
+      <h2>邮件中心</h2>
+      <p class="route-tip">来自星舰系统与三位乘客的私信</p>
+    </div>
+    <div class="mail-list" id="mailList"></div>
+  </section>
+
+  <!-- 任务 -->
+  <section id="task-screen" class="screen">
+    <div class="bg-stars"></div>
+    <div class="sub-header">
+      <div class="route-back" data-action="to-title">‹ 返回</div>
+      <h2>每日 / 每周任务</h2>
+      <p class="route-tip">完成即可领取星币与钻石</p>
+    </div>
+    <div class="task-list" id="taskList"></div>
+  </section>
+
+  <!-- 商店 / 送礼 -->
+  <section id="shop-screen" class="screen">
+    <div class="bg-stars"></div>
+    <div class="sub-header">
+      <div class="route-back" data-action="to-title">‹ 返回</div>
+      <h2>送礼商店</h2>
+      <p class="route-tip">不同礼物对三人好感加成不同</p>
+    </div>
+    <div class="shop-list" id="shopList"></div>
   </section>
 
   <!-- 回忆相册 -->
@@ -144,7 +186,7 @@
     </div>
   </section>
 
-  <!-- 浮层 · 通用 -->
+  <!-- 通用模态 -->
   <div class="modal" id="modal">
     <div class="modal-card">
       <div class="modal-title" id="modalTitle"></div>
@@ -167,12 +209,15 @@
 <script src="js/data.story.js"></script>
 <script src="js/data.routes.js"></script>
 <script src="js/data.gacha.js"></script>
+<script src="js/data.gifts.js"></script>
 <script src="js/portrait.js"></script>
 <script src="js/scene.js"></script>
+<script src="js/system.js"></script>
 <script src="js/ui.js"></script>
 <script src="js/save.js"></script>
 <script src="js/gallery.js"></script>
 <script src="js/gacha.js"></script>
+<script src="js/minigame.js"></script>
 <script src="js/engine.js"></script>
 <script src="js/main.js"></script>
 </body>

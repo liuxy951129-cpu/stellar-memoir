@@ -1,0 +1,112 @@
+/* ===== 顶部资源条 ===== */
+.top-bar{
+  position:fixed;top:0;left:0;right:0;height:36px;
+  background:linear-gradient(180deg, rgba(6,8,26,.85), rgba(6,8,26,.4) 80%, transparent);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:6px 14px;z-index:50;color:#fff;font-size:12px;letter-spacing:.1em;
+  backdrop-filter:blur(8px);pointer-events:none;
+}
+.top-bar > div{display:flex;gap:14px;pointer-events:auto;}
+.top-bar b{color:#ffd66b;font-weight:700;font-size:13px;margin-left:4px;}
+.tb-stam b{color:#3ad6ff;}
+
+/* 主游戏页隐藏 top-bar */
+#game-screen.active ~ #topBar,
+body:has(#game-screen.active) #topBar{ display:none; }
+/* fallback：JS 控制 */
+
+/* 邮件红点 */
+.mail-badge{
+  display:inline-block;min-width:18px;height:18px;padding:0 5px;border-radius:9px;
+  background:#ff3060;color:#fff;font-size:11px;line-height:18px;text-align:center;
+  margin-left:6px;font-weight:700;
+}
+
+/* 二级页 header */
+.sub-header{padding:50px 20px 10px;text-align:center;position:relative;z-index:2;}
+.sub-header h2{
+  font-size:24px;letter-spacing:.3em;
+  background:linear-gradient(180deg,#fff,#a99dff);-webkit-background-clip:text;color:transparent;
+}
+.sub-header .route-back{top:60px;}
+
+/* ===== 邮件 ===== */
+.mail-list{
+  position:absolute;left:0;right:0;top:160px;bottom:0;
+  overflow-y:auto;padding:0 16px 30px;
+}
+.mail-card{
+  margin-bottom:10px;padding:14px 16px;border-radius:12px;
+  background:linear-gradient(135deg, rgba(125,77,255,.18), rgba(11,15,44,.85));
+  border:1px solid rgba(125,77,255,.5);cursor:pointer;
+  transition:transform .25s, box-shadow .25s;
+}
+.mail-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(125,77,255,.4);}
+.mail-card.read{opacity:.6;background:rgba(11,15,44,.7);}
+.mail-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.mail-from{font-size:11px;letter-spacing:.2em;color:#3ad6ff;}
+.mail-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#ff3060;box-shadow:0 0 8px #ff3060;}
+.mail-title{font-size:15px;font-weight:700;color:#fff;margin-bottom:4px;}
+.mail-snippet{font-size:12px;color:#aab1d6;line-height:1.5;}
+
+/* ===== 任务 ===== */
+.task-list{
+  position:absolute;left:0;right:0;top:160px;bottom:0;
+  overflow-y:auto;padding:0 16px 30px;
+}
+.task-card{
+  margin-bottom:10px;padding:14px 16px;border-radius:12px;
+  background:linear-gradient(135deg, rgba(58,214,255,.12), rgba(11,15,44,.85));
+  border:1px solid rgba(58,214,255,.35);
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+}
+.task-name{font-size:14px;color:#fff;letter-spacing:.05em;margin-bottom:4px;}
+.task-prog{font-size:11px;color:#aab1d6;letter-spacing:.1em;}
+.task-r{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:6px;min-width:120px;}
+.task-reward{font-size:11px;color:#ffd66b;letter-spacing:.1em;}
+
+/* ===== 商店 ===== */
+.shop-list{
+  position:absolute;left:0;right:0;top:160px;bottom:0;
+  overflow-y:auto;padding:0 16px 30px;
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;
+}
+.shop-card{
+  padding:14px 12px;border-radius:14px;
+  background:linear-gradient(180deg, rgba(125,77,255,.15), rgba(11,15,44,.85));
+  border:1px solid rgba(125,77,255,.35);
+  text-align:center;
+  transition:transform .25s;
+}
+.shop-card:hover{transform:translateY(-4px);box-shadow:0 10px 24px rgba(125,77,255,.4);}
+.shop-emoji{font-size:38px;margin-bottom:4px;}
+.shop-name{font-size:13px;color:#fff;font-weight:700;margin-bottom:2px;}
+.shop-desc{font-size:10px;color:#aab1d6;margin-bottom:6px;min-height:24px;line-height:1.4;}
+.shop-aff{font-size:10px;color:#ffd9ee;margin-bottom:10px;letter-spacing:.05em;}
+.shop-buy{display:flex;align-items:center;justify-content:space-between;padding:0 4px;}
+.shop-cost{color:#ffd66b;font-size:12px;font-weight:700;}
+
+/* ===== route-card 阶段标 ===== */
+.rc-stage{
+  position:absolute;top:14px;right:14px;padding:4px 10px;border-radius:14px;
+  background:linear-gradient(135deg,#ff77c8,#ffd66b);
+  font-size:11px;letter-spacing:.2em;color:#fff;font-weight:700;
+  box-shadow:0 4px 10px rgba(255,119,200,.4);
+}
+
+/* 角色立绘卡片在 route-select 中头像区 */
+.route-card .rc-bg img{object-position:center 10% !important;}
+
+/* 顶部资源条与 hud 冲突时，仅在非 game 屏显示 */
+.screen#game-screen.active ~ .top-bar{display:none;}
+
+/* 主页位置整体下移留出 top-bar 空间 */
+.title-wrap{padding-top:36px;}
+.sub-header{padding-top:55px;}
+
+/* 移动端调整 */
+@media (max-width:480px){
+  .shop-list{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));}
+  .task-card{flex-direction:column;align-items:flex-start;}
+  .task-r{align-items:flex-start;text-align:left;}
+}

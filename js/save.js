@@ -1,6 +1,6 @@
-/* 存档系统 */
-const SAVE_KEY = "stellar_memoir_save_v1";
-const SETTINGS_KEY = "stellar_memoir_settings_v1";
+/* 存档系统 v2 */
+const SAVE_KEY = "stellar_memoir_save_v2";
+const SETTINGS_KEY = "stellar_memoir_settings_v2";
 
 window.Save = {
   load(){
@@ -20,13 +20,18 @@ window.Save = {
       flags:{},
       unlockedCG:{},
       finishedRoutes:{},
-      // 货币 / 资源
       coin: 300,
       diamond: 10,
-      // 抽卡历史
       gachaHistory: [],
-      // 已读
-      readSet:{}
+      readSet:{},
+      stamina: 30,
+      lastStaminaTs: Date.now(),
+      gifts: {},
+      stages: { qianye:0, yunli:0, yin:0 },
+      mailbox: [],
+      mailRead: {},
+      dailyState: { date:"", talkCount:0, giftCount:0, miniCount:0, mailReadCount:0, claimed:{} },
+      weeklyState: { week:"", routeFinished:0, cgCount:0, maxAff:0, miniCount:0, claimed:{} }
     };
   },
   loadSettings(){

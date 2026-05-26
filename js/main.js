@@ -1,13 +1,35 @@
-/* 入口 */
+/* 入口 v2 */
 (function(){
   let save = Save.load() || Save.defaults();
+  // 合并默认字段（兼容老存档）
+  const def = Save.defaults();
+  for (const k of Object.keys(def)){
+    if (save[k] === undefined) save[k] = def[k];
+  }
   let settings = Save.loadSettings();
+  Sys.initSave(save);
   Engine.init(save, settings);
 
-  // 渲染初始 UI
+  // 体力心跳
+  setInterval(()=>{
+    Sys.tickStamina(save);
+    UI.renderTopBar(save);
+  }, 5000);
+
+  // 初始渲染
   UI.renderRouteCards("routeCards", save);
+  UI.renderTopBar(save);
   Gallery.render(save);
   Gacha.render(save);
+  UI.renderAffinityMini(save.affinity);
+
+  // 控制顶部资源条在 game-screen 时隐藏
+  function syncTopBar(){
+    const game = document.getElementById("game-screen");
+    document.getElementById("topBar").style.display =
+      (game.classList.contains("active")) ? "none" : "flex";
+  }
+  setInterval(syncTopBar, 200);
 
   // 全局点击代理
   document.addEventListener("click", (e)=>{
@@ -20,19 +42,60 @@
       Engine.start(card.dataset.route);
       return;
     }
+    // 商店送出按钮
+    const shopBtn = t.closest(".shop-send");
+    if (shopBtn){
+      UI.showGiftReceiver(save, shopBtn.dataset.gid);
+      Sys.countTask(save, "giftCount", 0); // 实际送出时计数
+      Save.store(save);
+      return;
+    }
+    // 任务领取
+    const claim = t.closest(".task-claim");
+    if (claim && !claim.disabled){
+      Sys.claimTask(save, claim.dataset.task, claim.dataset.kind);
+      Save.store(save);
+      UI.renderTasks(save);
+      UI.renderTopBar(save);
+      return;
+    }
 
     if (!action) return;
 
     switch(action){
       case "start-new":
-        save = Save.defaults();
-        Engine.init(save, settings);
-        UI.renderRouteCards("routeCards", save);
-        UI.switchScreen("route-select");
+        if (save.currentRoute){
+          UI.modal({
+            title:"提示",
+            body:"<p>已有进行中的故事。是否覆盖开始新故事？</p>",
+            onOk: ()=>{
+              save = Save.defaults();
+              Sys.initSave(save);
+              Engine.init(save, settings);
+              UI.renderRouteCards("routeCards", save);
+              UI.switchScreen("route-select");
+              UI.closeModal();
+            }
+          });
+        } else {
+          UI.switchScreen("route-select");
+        }
         break;
       case "continue":
-        if (!save.currentRoute){ UI.toast("还没有进行中的故事"); return; }
+        if (!save.currentRoute){ UI.toast("还没有进行中的故事，选个角色开始吧"); UI.switchScreen("route-select"); return; }
         Engine.resume();
+        break;
+      case "tasks":
+        UI.renderTasks(save);
+        UI.switchScreen("task-screen");
+        break;
+      case "mailbox":
+        UI.renderMailbox(save);
+        UI.switchScreen("mailbox-screen");
+        break;
+      case "shop":
+        UI.renderShop(save);
+        UI.switchScreen("shop-screen");
         break;
       case "gallery":
         Gallery.render(save);
@@ -46,13 +109,16 @@
         UI.switchScreen("settings-screen");
         break;
       case "to-title":
+        UI.renderRouteCards("routeCards", save);
         UI.switchScreen("title-screen");
         break;
 
       case "menu":
         UI.modal({
           title:"菜单",
-          body:"<p>返回标题页将保留当前进度，可随时继续。</p>",
+          body:`<p>当前章节进度已自动保存。</p>
+                <p>体力：<b style="color:#3ad6ff;">${save.stamina}/${Sys.MAX_STAMINA}</b></p>
+                <p>每章消耗 <b>3</b> 体力。每分钟回 1。</p>`,
           onOk: ()=>{ UI.switchScreen("title-screen"); UI.closeModal(); }
         });
         break;
@@ -84,6 +150,7 @@
         const s = Save.load();
         if (!s){ UI.toast("无存档"); break; }
         Engine.save = s;
+        save = s;
         Engine.run();
         UI.toast("已读档");
         break;
@@ -106,6 +173,7 @@
         if (got){
           Gacha.renderResult(got);
           Gacha.render(save);
+          UI.renderTopBar(save);
           UI.toast(`抽到：${got[0].rk} · ${got[0].name}`);
         }
         break;
@@ -115,6 +183,7 @@
         if (got){
           Gacha.renderResult(got);
           Gacha.render(save);
+          UI.renderTopBar(save);
           const best = got.reduce((b,x)=> ({R:1,SR:2,SSR:3}[x.rk] > ({R:1,SR:2,SSR:3}[b.rk]||0) ? x : b), got[0]);
           UI.toast(`十连完成 · 最高 ${best.rk}：${best.name}`);
         }
@@ -129,6 +198,7 @@
             save.diamond += 10;
             Save.store(save);
             Gacha.render(save);
+            UI.renderTopBar(save);
             UI.closeModal();
             UI.toast("已到账");
           }
@@ -138,14 +208,17 @@
       case "reset-save":
         UI.modal({
           title:"确认清空？",
-          body:"<p>所有剧情进度、相册、抽卡历史都会被重置。</p>",
+          body:"<p>所有剧情进度、相册、抽卡历史、邮件都会被重置。</p>",
           onOk:()=>{
             Save.clear();
             save = Save.defaults();
+            Sys.initSave(save);
             Engine.init(save, settings);
             UI.renderRouteCards("routeCards", save);
             Gallery.render(save);
             Gacha.render(save);
+            UI.renderTopBar(save);
+            UI.renderAffinityMini(save.affinity);
             UI.closeModal();
             UI.toast("已清空");
           }
@@ -173,7 +246,4 @@
   const ors = document.getElementById("onlyReadSkip");
   ors.checked = settings.onlyReadSkip;
   ors.addEventListener("change", ()=>{ settings.onlyReadSkip = ors.checked; Save.storeSettings(settings); });
-
-  // 初始好感度条
-  UI.renderAffinityMini(save.affinity);
 })();
