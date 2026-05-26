@@ -4,6 +4,9 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
 <title>星海拾遗 · Stellar Memoir</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600&family=Noto+Sans+SC:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap">
 <link rel="stylesheet" href="css/main.css" />
 <link rel="stylesheet" href="css/character.css" />
 <link rel="stylesheet" href="css/ui.css" />
@@ -12,6 +15,7 @@
 <link rel="stylesheet" href="css/v4.css" />
 <link rel="stylesheet" href="css/v5.css" />
 <link rel="stylesheet" href="css/v6.css" />
+<link rel="stylesheet" href="css/v7.css" />
 </head>
 <body>
 <div id="app">
@@ -126,7 +130,7 @@
         <div class="rh-aff-label">好感</div>
       </div>
       <div class="rh-cg-num" id="rhCgNum">0/13</div>
-      <div class="rh-rep-num" id="rhRepNum">修复 0%</div>
+      <div class="rh-rep-num" id="rhRepNum" data-action="repair-detail">修复 0%</div>
     </div>
 
     <!-- 异常事件提示（玩家暗线触发用） -->
@@ -311,7 +315,7 @@
 </div>
 
 <script charset="utf-8" src="js/data.story.js"></script>
-<script charset="utf-8" src="js/data.story.qianye.v6.js"></script>
+<script charset="utf-8" src="js/data.story.qianye.v7.js"></script>
 <script charset="utf-8" src="js/data.routes.js"></script>
 <script charset="utf-8" src="js/data.gacha.js"></script>
 <script charset="utf-8" src="js/data.gifts.js"></script>
@@ -326,6 +330,7 @@
 <script charset="utf-8" src="js/anomaly.js"></script>
 <script charset="utf-8" src="js/interact.js"></script>
 <script charset="utf-8" src="js/chapters.js"></script>
+<script charset="utf-8" src="js/repair.js"></script>
 <script charset="utf-8" src="js/prologue.js"></script>
 <script charset="utf-8" src="js/engine.js"></script>
 <script charset="utf-8" src="js/main.js"></script>

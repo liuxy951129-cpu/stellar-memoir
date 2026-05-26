@@ -180,6 +180,72 @@ window.Interact = {
   },
 
   /* ---------- 打字输入 ---------- */
+  /* v7: 语音输入 - 按住模拟录音 + 直接点击选项
+   * { type:"voice", text, prompt, options:[{label, correct?, aff?, flag?}], success:{flag,next}, fail:{next} }
+   */
+  voice(step, onDone){
+    this._onDone = onDone;
+    const host = this._host();
+    const opts = (step.options || []).slice();
+    host.innerHTML = `
+      <div class="ix-voice">
+        <div class="iv-hint">${step.text || ''}</div>
+        <div class="iv-mic" id="ivMic">🎤</div>
+        <div class="iv-wave" id="ivWave">
+          <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <div class="iv-tip">按住麦克风说话，或直接点击下方选项</div>
+        <div class="iv-options" id="ivOptions">
+          ${opts.map((o, i) => `
+            <button class="iv-option" data-i="${i}">
+              <span class="iv-num">${i+1}</span>${this._esc(o.label)}
+            </button>
+          `).join("")}
+        </div>
+      </div>
+    `;
+    this._show();
+
+    const mic = host.querySelector("#ivMic");
+    const wave = host.querySelector("#ivWave");
+    let recordTimer = null;
+
+    const startRecord = (e) => {
+      if (e) e.preventDefault();
+      mic.classList.add("recording");
+      wave.classList.add("on");
+      clearTimeout(recordTimer);
+      recordTimer = setTimeout(stopRecord, 2200);
+    };
+    const stopRecord = () => {
+      mic.classList.remove("recording");
+      wave.classList.remove("on");
+      // 模拟"语音识别失败" toast，提示用点击选项
+      const tip = host.querySelector(".iv-tip");
+      if (tip){
+        tip.textContent = "没听清，请直接点击下方选项";
+        tip.style.color = "#ffd66b";
+      }
+    };
+
+    mic.addEventListener("mousedown", startRecord);
+    mic.addEventListener("touchstart", startRecord);
+    mic.addEventListener("mouseup", stopRecord);
+    mic.addEventListener("touchend", stopRecord);
+    mic.addEventListener("mouseleave", stopRecord);
+
+    host.querySelectorAll(".iv-option").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const idx = +btn.dataset.i;
+        const picked = opts[idx];
+        if (!picked) return;
+        this.finish({ success: !!picked.correct, value: picked.label, picked });
+      });
+    });
+  },
+
+  _esc(s){ return String(s||"").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"})[c]); },
+
   typing(step, onDone){
     this._onDone = onDone;
     const host = this._host();

@@ -137,7 +137,7 @@ window.Engine = {
         this.save.stepIndex++;
         continue;
       }
-      if (t === "countdown" || t === "touch" || t === "drag" || t === "typing" || t === "swipe" || t === "qte"){
+      if (t === "countdown" || t === "touch" || t === "drag" || t === "typing" || t === "voice" || t === "swipe" || t === "qte"){
         // 互动机制
         const handler = Interact[t === "qte" ? "qte" : t];
         this.save.stepIndex++;
@@ -146,7 +146,6 @@ window.Engine = {
           // 应用 success/fail 分支
           let target = null;
           if (t === "countdown" && result.opt){
-            // 倒计时按选项
             const opt = result.opt;
             if (opt.aff) Object.keys(opt.aff).forEach(k => this.save.affinity[k] = (this.save.affinity[k]||0) + opt.aff[k]);
             if (opt.flag) this.save.flags[opt.flag] = true;
@@ -156,6 +155,19 @@ window.Engine = {
             if (r.aff) Object.keys(r.aff).forEach(k => this.save.affinity[k] = (this.save.affinity[k]||0) + r.aff[k]);
             if (r.flag) this.save.flags[r.flag] = true;
             target = r.next;
+          } else if (t === "voice" && result.picked){
+            const p = result.picked;
+            if (p.aff) Object.keys(p.aff).forEach(k => this.save.affinity[k] = (this.save.affinity[k]||0) + p.aff[k]);
+            if (p.flag) this.save.flags[p.flag] = true;
+            target = p.next;
+            if (!target){
+              const branch = result.success ? step.success : step.fail;
+              if (branch){
+                if (branch.flag) this.save.flags[branch.flag] = true;
+                if (branch.aff) Object.keys(branch.aff).forEach(k => this.save.affinity[k] = (this.save.affinity[k]||0) + branch.aff[k]);
+                target = branch.next;
+              }
+            }
           } else {
             const branch = result.success ? step.success : step.fail;
             if (branch){
@@ -194,29 +206,27 @@ window.Engine = {
     document.getElementById("dayTag").textContent = "Day " + step.day;
     document.getElementById("chapterTag").textContent = step.name;
 
-    // v6.1: Day 切换才显示大 DAY 卡，否则只用底部小章节条
+    // v7: 只在 Day 切换时弹大 DAY 卡；同 Day 内章节切换直接进入剧情（左上角已常驻）
     const lastDay = this._lastShownDay;
     const isDayChange = (lastDay === undefined || lastDay !== step.day);
     this._lastShownDay = step.day;
 
-    const cf = document.createElement("div");
-    if (isDayChange){
-      cf.className = "chapter-fade day-change";
-      cf.innerHTML = `<div class="cf-day-big">DAY ${step.day}</div>
-                      <div class="cf-name">${step.name}</div>
-                      <div class="cf-en">${step.en || ""}</div>`;
-    } else {
-      cf.className = "chapter-fade chapter-only";
-      cf.innerHTML = `<div class="cf-name-only">${step.name}</div>
-                      <div class="cf-en-small">${step.en || ""}</div>`;
+    if (!isDayChange){
+      setTimeout(() => this.run(), 0);
+      return;
     }
+
+    const cf = document.createElement("div");
+    cf.className = "chapter-fade day-change";
+    cf.innerHTML = `<div class="cf-day-big">DAY ${step.day}</div>
+                    <div class="cf-name">${step.name}</div>
+                    <div class="cf-en">${step.en || ""}</div>`;
     document.getElementById("game-screen").appendChild(cf);
-    const showMs = isDayChange ? 1700 : 950;
     setTimeout(()=>{
       cf.style.transition = "opacity 0.7s";
       cf.style.opacity = 0;
       setTimeout(()=>{ cf.remove(); this.run(); }, 700);
-    }, showMs);
+    }, 1700);
   },
 
   renderLine(step){
@@ -270,6 +280,9 @@ window.Engine = {
     this.typeText(textEl, step.text, step.important);
     this.log.push({who:label, text:step.text});
 
+    // v7: 术语解释卡（右侧 3s 自动消失）
+    if (step.term) this.showTermCard(step.term);
+
     // 已读 + 任务计数（每次显示对话算一次 talk）
     const key = this.save.currentRoute + "_" + this.save.stepIndex;
     if (!this.save.readSet[key] && (step.who !== "narrator" && step.who !== "player")){
@@ -297,19 +310,19 @@ window.Engine = {
   typeText(el, txt, important){
     clearInterval(this.typingTimer);
     this.typing = true;
-    el.textContent = "";
+    el.innerHTML = "";
     el.classList.toggle("imp-line", !!important);
+    const raw = String(txt || "");
     let i = 0;
     const speed = Math.max(8, 80 - (this.settings.textSpeed || 35));
     this.typingTimer = setInterval(()=>{
-      el.textContent = txt.slice(0, ++i);
-      if (i >= txt.length){
+      i++;
+      el.innerHTML = this._renderRich(raw.slice(0, i));
+      if (i >= raw.length){
         clearInterval(this.typingTimer);
         this.typing = false;
-        // 关键句加奖励：拾取关键记忆
         if (important && this.save && this.save.currentRoute){
           const km = this.save.keyMemory[this.save.currentRoute] = this.save.keyMemory[this.save.currentRoute] || {};
-          // 用当前章节 idx 标记
           const chapterIdx = Chapters.currentChapterIdx(this.save, this.save.currentRoute);
           if (chapterIdx >= 0 && !km[chapterIdx]){
             km[chapterIdx] = true;
@@ -321,13 +334,41 @@ window.Engine = {
     }, speed);
   },
 
+  /* 支持 **xxx** 加粗变色 */
+  _renderRich(raw){
+    // 先 escape，再把 ** xxx ** 转为 span（避免 xss）
+    const esc = String(raw).replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"})[c]);
+    return esc.replace(/\*\*([^*\n]+?)\*\*/g, '<span class="em-line">$1</span>');
+  },
+
+  /* 术语解释卡（右侧 3s 自动消失） */
+  showTermCard(term){
+    if (!term || !term.name || !term.def) return;
+    const old = document.getElementById("termCard");
+    if (old) old.remove();
+    const card = document.createElement("div");
+    card.id = "termCard";
+    card.className = "term-card";
+    card.innerHTML = `
+      <div class="tc-label">TERM</div>
+      <div class="tc-name">${this._esc(term.name)}</div>
+      <div class="tc-def">${this._esc(term.def)}</div>
+      <div class="tc-bar"></div>
+    `;
+    document.body.appendChild(card);
+    setTimeout(()=>{
+      card.classList.add("term-out");
+      setTimeout(()=> card.remove(), 450);
+    }, 3000);
+  },
+  _esc(s){ return String(s||"").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"})[c]); },
+
   finishTyping(){
     if (!this.typing) return false;
     clearInterval(this.typingTimer);
     const steps = this.current();
     const step = steps[this.save.stepIndex - 1];
-    if (step && step.text) document.getElementById("dialogText").textContent = step.text;
-    // 即使瞬间跳到末尾也要算关键记忆
+    if (step && step.text) document.getElementById("dialogText").innerHTML = this._renderRich(step.text);
     if (step && step.important && this.save && this.save.currentRoute){
       const km = this.save.keyMemory[this.save.currentRoute] = this.save.keyMemory[this.save.currentRoute] || {};
       const chapterIdx = Chapters.currentChapterIdx(this.save, this.save.currentRoute);

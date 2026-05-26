@@ -164,6 +164,13 @@
           UI.toast("请先开启一条主线");
         }
         break;
+      case "repair-detail":
+        if (save.currentRoute){
+          Repair.show(save);
+        } else {
+          UI.toast("请先开启一条主线");
+        }
+        break;
       case "log":
         UI.modal({
           title:"对话日志",
