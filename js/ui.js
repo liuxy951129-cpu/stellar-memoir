@@ -95,6 +95,22 @@ window.UI = {
     const cLen = 251.3;
     const cRing = document.getElementById("rhCgRing");
     if (cRing) cRing.setAttribute("stroke-dasharray", `${cPct * cLen} ${cLen}`);
+
+    /* v6: 修复度 = 章节进度 70% + 关键记忆拾取 30% */
+    if (window.Chapters){
+      const chList = Chapters.list(route);
+      const totalCh = chList.length || 1;
+      const readCh = chList.filter(c => Chapters.hasRead(save, route, c.idx)).length;
+      const km = (save.keyMemory && save.keyMemory[route]) || {};
+      const keyGot = Object.keys(km).length;
+      const repPct = Math.min(1, (readCh / totalCh) * 0.7 + (keyGot / totalCh) * 0.3);
+
+      const repNumEl = document.getElementById("rhRepNum");
+      const repRing = document.getElementById("rhRepRing");
+      const rLen = 188.5; // 2*PI*30
+      if (repNumEl) repNumEl.textContent = `修复 ${Math.round(repPct * 100)}%`;
+      if (repRing) repRing.setAttribute("stroke-dasharray", `${repPct * rLen} ${rLen}`);
+    }
   },
 
   showAnomaly(text, ms = 2800){

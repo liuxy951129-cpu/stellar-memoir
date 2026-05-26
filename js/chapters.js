@@ -3,18 +3,35 @@ window.Chapters = {
   list(route){
     const story = (window.STORY || {})[route] || [];
     const arr = [];
+    let curChapterIdx = -1;
+    let curHasImportant = false;
     for (let i = 0; i < story.length; i++){
       if (story[i].type === "chapter"){
+        if (curChapterIdx >= 0){
+          arr[arr.length - 1].hasImportant = curHasImportant;
+        }
+        curChapterIdx = i;
+        curHasImportant = false;
         arr.push({
           idx:i,
           name: story[i].name,
           en: story[i].en,
           day: story[i].day || 1,
-          hidden: (story[i].name||"").indexOf("隐藏") >= 0
+          hidden: (story[i].name||"").indexOf("隐藏") >= 0,
+          hasImportant: false
         });
+      } else if (story[i].important){
+        curHasImportant = true;
       }
     }
+    if (arr.length){
+      arr[arr.length - 1].hasImportant = curHasImportant;
+    }
     return arr;
+  },
+
+  hasKeyMemory(save, route, chapterIdx){
+    return !!(save.keyMemory && save.keyMemory[route] && save.keyMemory[route][chapterIdx]);
   },
 
   hasRead(save, route, chapterIdx){
@@ -122,11 +139,13 @@ window.Chapters = {
         const isRead = this.hasRead(save, route, c.idx);
         const isUnlocked = this.unlock(save, route, c.idx);
         const isCurrent = c.idx === currIdx && !isRead;
+        const missingKey = isRead && c.hasImportant && !this.hasKeyMemory(save, route, c.idx);
         const cls = [
           isRead ? "read" : "",
           isCurrent ? "current" : "",
           (!isRead && !isUnlocked) ? "locked" : "",
-          c.hidden ? "hidden-ch" : ""
+          c.hidden ? "hidden-ch" : "",
+          missingKey ? "missing-key" : ""
         ].filter(Boolean).join(" ");
         const displayN = this.displayName(c, isRead, isUnlocked);
         const displayTag = isRead ? (c.en || "") :

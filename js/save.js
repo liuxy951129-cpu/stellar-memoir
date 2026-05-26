@@ -16,6 +16,8 @@ window.Save = {
     return {
       currentRoute: null,
       stepIndex: 0,
+      prologueDone: false,
+      keyMemory: {},
       affinity:{ qianye:0, yunli:0, yin:0 },
       flags:{},
       unlockedCG:{},

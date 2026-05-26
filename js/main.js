@@ -88,13 +88,12 @@
               save = Save.defaults();
               Sys.initSave(save);
               Engine.init(save, settings);
-              UI.renderRouteCards("routeCards", save);
-              UI.switchScreen("route-select");
               UI.closeModal();
+              startWithPrologueIfNeeded();
             }
           });
         } else {
-          UI.switchScreen("route-select");
+          startWithPrologueIfNeeded();
         }
         break;
       case "continue":
@@ -276,4 +275,41 @@
   const ors = document.getElementById("onlyReadSkip");
   ors.checked = settings.onlyReadSkip;
   ors.addEventListener("change", ()=>{ settings.onlyReadSkip = ors.checked; Save.storeSettings(settings); });
+
+  /* ===== v6 序章引导 ===== */
+  function startWithPrologueIfNeeded(){
+    if (save.prologueDone){
+      UI.renderRouteCards("routeCards", save);
+      UI.switchScreen("route-select");
+      return;
+    }
+    Prologue.start((chosenRoute) => {
+      save.prologueDone = true;
+      Save.store(save);
+      // 直接进入选定的支线
+      if (chosenRoute){
+        save.currentRoute = chosenRoute;
+        save.stepIndex = 0;
+        Save.store(save);
+        UI.switchScreen("game-screen");
+        Engine.run();
+      } else {
+        UI.renderRouteCards("routeCards", save);
+        UI.switchScreen("route-select");
+      }
+    });
+  }
+
+  // 暴露给设置页"重看序章"
+  window.__replayPrologue = function(){
+    Prologue.start((chosenRoute) => {
+      if (chosenRoute){
+        save.currentRoute = chosenRoute;
+        save.stepIndex = 0;
+        Save.store(save);
+        UI.switchScreen("game-screen");
+        Engine.run();
+      }
+    });
+  };
 })();

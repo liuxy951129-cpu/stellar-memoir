@@ -252,7 +252,7 @@ window.Engine = {
     speakerEl.className = cls;
     speakerEl.textContent = label;
 
-    this.typeText(textEl, step.text);
+    this.typeText(textEl, step.text, step.important);
     this.log.push({who:label, text:step.text});
 
     // 已读 + 任务计数（每次显示对话算一次 talk）
@@ -279,10 +279,11 @@ window.Engine = {
     }
   },
 
-  typeText(el, txt){
+  typeText(el, txt, important){
     clearInterval(this.typingTimer);
     this.typing = true;
     el.textContent = "";
+    el.classList.toggle("imp-line", !!important);
     let i = 0;
     const speed = Math.max(8, 80 - (this.settings.textSpeed || 35));
     this.typingTimer = setInterval(()=>{
@@ -290,6 +291,17 @@ window.Engine = {
       if (i >= txt.length){
         clearInterval(this.typingTimer);
         this.typing = false;
+        // 关键句加奖励：拾取关键记忆
+        if (important && this.save && this.save.currentRoute){
+          const km = this.save.keyMemory[this.save.currentRoute] = this.save.keyMemory[this.save.currentRoute] || {};
+          // 用当前章节 idx 标记
+          const chapterIdx = Chapters.currentChapterIdx(this.save, this.save.currentRoute);
+          if (chapterIdx >= 0 && !km[chapterIdx]){
+            km[chapterIdx] = true;
+            Save.store(this.save);
+            UI.renderRoundHUD && UI.renderRoundHUD(this.save);
+          }
+        }
       }
     }, speed);
   },
@@ -300,6 +312,16 @@ window.Engine = {
     const steps = this.current();
     const step = steps[this.save.stepIndex - 1];
     if (step && step.text) document.getElementById("dialogText").textContent = step.text;
+    // 即使瞬间跳到末尾也要算关键记忆
+    if (step && step.important && this.save && this.save.currentRoute){
+      const km = this.save.keyMemory[this.save.currentRoute] = this.save.keyMemory[this.save.currentRoute] || {};
+      const chapterIdx = Chapters.currentChapterIdx(this.save, this.save.currentRoute);
+      if (chapterIdx >= 0 && !km[chapterIdx]){
+        km[chapterIdx] = true;
+        Save.store(this.save);
+        UI.renderRoundHUD && UI.renderRoundHUD(this.save);
+      }
+    }
     this.typing = false;
     return true;
   },

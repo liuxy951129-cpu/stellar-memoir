@@ -1,0 +1,321 @@
+/* ============= v6 升级：序章引导 + 修复度 + 重点对话 ============= */
+
+/* ===== 序章 Prologue ===== */
+.prologue-layer{
+  position:fixed; inset:0;
+  z-index:5000;
+  background:#03050d;
+  overflow:hidden;
+  cursor:pointer;
+  animation:plFadeIn .8s ease;
+}
+.prologue-layer.fading-out{ animation:plFadeOut .6s ease forwards; }
+@keyframes plFadeIn{ from{opacity:0;} to{opacity:1;} }
+@keyframes plFadeOut{ from{opacity:1;} to{opacity:0;} }
+
+.prologue-layer .pl-bg{
+  position:absolute; inset:0;
+  background-size:cover; background-position:center;
+  opacity:.45;
+  filter:blur(2px) brightness(.7);
+  animation:plBgKen 60s ease-in-out infinite alternate;
+}
+@keyframes plBgKen{
+  0%{transform:scale(1) translate(0,0);}
+  100%{transform:scale(1.08) translate(-2%, -1%);}
+}
+.prologue-layer .pl-vignette{
+  position:absolute; inset:0;
+  background:
+    radial-gradient(ellipse at 50% 50%, transparent 30%, rgba(0,0,0,.85) 100%),
+    linear-gradient(180deg, rgba(20,10,40,.4), rgba(0,0,0,.7));
+  pointer-events:none;
+}
+
+.prologue-layer .pl-content{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:60px 32px 100px;
+  z-index:10;
+}
+.prologue-layer .pl-text-wrap{
+  width:100%;
+  max-width:680px;
+  text-align:center;
+  color:#e8e8ff;
+}
+
+.pl-narr{
+  font-size:18px; line-height:2;
+  letter-spacing:1px;
+  color:rgba(232,232,255,.92);
+  text-shadow:0 0 20px rgba(125,77,255,.4), 0 4px 12px rgba(0,0,0,.7);
+  animation:plTextIn .65s ease;
+}
+@keyframes plTextIn{
+  from{ opacity:0; transform:translateY(12px); filter:blur(4px); }
+  to{ opacity:1; transform:translateY(0); filter:blur(0); }
+}
+
+.pl-title-block{
+  animation:plTitleIn 1.2s ease;
+}
+.pl-title-main{
+  font-size:42px;
+  font-weight:300;
+  letter-spacing:14px;
+  margin-bottom:14px;
+  color:#fff;
+  text-shadow:0 0 30px rgba(125,77,255,.6);
+}
+.pl-title-sub{
+  font-size:13px;
+  letter-spacing:6px;
+  color:rgba(255,255,255,.6);
+}
+@keyframes plTitleIn{
+  0%{ opacity:0; transform:scale(1.15); letter-spacing:30px; }
+  100%{ opacity:1; transform:scale(1); }
+}
+
+.pl-voice{
+  font-size:17px; line-height:1.9;
+  letter-spacing:1.5px;
+  color:#9fd9ff;
+  text-shadow:0 0 16px rgba(58,214,255,.5);
+  font-family:'Courier New', monospace;
+  animation:plVoiceIn .55s ease;
+  position:relative;
+  padding-left:88px;
+  text-align:left;
+  display:inline-block;
+}
+.pl-voice-tag{
+  position:absolute; left:0; top:4px;
+  font-size:11px; letter-spacing:2px;
+  background:rgba(58,214,255,.18);
+  border:1px solid rgba(58,214,255,.5);
+  padding:2px 8px; border-radius:3px;
+  color:#3ad6ff;
+}
+@keyframes plVoiceIn{
+  from{ opacity:0; transform:translateX(-8px); }
+  to{ opacity:1; transform:translateX(0); }
+}
+
+.pl-doc{
+  background:rgba(15,10,30,.85);
+  border:1px solid rgba(125,77,255,.4);
+  border-radius:14px;
+  padding:24px 28px;
+  text-align:left;
+  box-shadow:0 30px 80px rgba(0,0,0,.6);
+  animation:plDocIn .8s ease;
+}
+.pl-doc-title{
+  font-size:18px;
+  letter-spacing:2px;
+  color:#fff;
+  margin-bottom:16px;
+  padding-bottom:12px;
+  border-bottom:1px solid rgba(125,77,255,.3);
+}
+.pl-doc-list{
+  list-style:none; padding:0; margin:0;
+}
+.pl-doc-list li{
+  position:relative;
+  font-size:14px; line-height:1.85;
+  letter-spacing:.5px;
+  color:rgba(255,255,255,.85);
+  padding-left:20px;
+  margin-bottom:8px;
+}
+.pl-doc-list li::before{
+  content:"›";
+  position:absolute; left:0;
+  color:#7d4dff;
+  font-weight:bold;
+}
+@keyframes plDocIn{
+  from{ opacity:0; transform:translateY(20px); }
+  to{ opacity:1; transform:translateY(0); }
+}
+
+.pl-keyline{
+  font-size:22px;
+  line-height:2;
+  letter-spacing:3px;
+  color:#fff;
+  text-shadow:0 0 24px rgba(255,119,200,.65), 0 0 8px rgba(255,255,255,.4);
+  animation:plKeyIn 1s ease;
+}
+.pl-keyline b{
+  font-weight:600;
+  background:linear-gradient(90deg, #ff77c8, #ffd66b, #3ad6ff);
+  background-clip:text;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+@keyframes plKeyIn{
+  0%{ opacity:0; letter-spacing:30px; transform:scale(1.1); }
+  100%{ opacity:1; letter-spacing:3px; transform:scale(1); }
+}
+
+.pl-choice{
+  text-align:center;
+  animation:plChoiceIn .6s ease;
+}
+.pl-choice-q{
+  font-size:16px;
+  color:rgba(255,255,255,.85);
+  margin-bottom:24px;
+  letter-spacing:1px;
+}
+.pl-choice-rows{
+  display:flex; flex-direction:column; gap:12px;
+  align-items:center;
+}
+.pl-choice-row{
+  display:flex; align-items:center;
+  width:100%; max-width:460px;
+  background:rgba(20,15,45,.75);
+  border:1px solid rgba(125,77,255,.4);
+  border-radius:30px;
+  padding:14px 22px;
+  cursor:pointer;
+  transition:all .25s;
+  color:#fff;
+}
+.pl-choice-row:hover{
+  background:rgba(125,77,255,.25);
+  border-color:rgba(255,119,200,.6);
+  transform:translateY(-2px);
+  box-shadow:0 8px 24px rgba(125,77,255,.4);
+}
+.pl-choice-row.picked{
+  background:linear-gradient(90deg, rgba(255,119,200,.4), rgba(125,77,255,.5));
+  border-color:#ff77c8;
+}
+.pl-choice-arrow{
+  color:#ff77c8;
+  margin-right:14px;
+  font-size:20px;
+}
+.pl-choice-label{
+  font-size:14px;
+  letter-spacing:.5px;
+}
+@keyframes plChoiceIn{
+  from{ opacity:0; transform:translateY(12px); }
+  to{ opacity:1; transform:translateY(0); }
+}
+
+.pl-skip{
+  position:absolute;
+  top:24px; right:24px;
+  background:rgba(0,0,0,.4);
+  border:1px solid rgba(255,255,255,.2);
+  color:rgba(255,255,255,.6);
+  font-size:12px;
+  padding:6px 14px;
+  border-radius:14px;
+  cursor:pointer;
+  letter-spacing:1px;
+  z-index:20;
+}
+.pl-skip:hover{
+  border-color:rgba(255,255,255,.5);
+  color:#fff;
+}
+.pl-tap{
+  position:absolute;
+  bottom:32px; left:50%; transform:translateX(-50%);
+  font-size:11px;
+  letter-spacing:3px;
+  color:rgba(255,255,255,.4);
+  animation:plTapBlink 1.6s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes plTapBlink{
+  0%, 100%{ opacity:.3; }
+  50%{ opacity:.8; }
+}
+
+/* ===== 重点对话句（important: true）===== */
+.dialog-text .imp-line{
+  font-weight:bold;
+  color:#ff5577;
+  text-shadow:0 0 14px rgba(255,85,119,.7), 0 0 4px rgba(255,170,200,.5);
+  animation:impGlow 1.8s ease-in-out infinite alternate;
+}
+@keyframes impGlow{
+  0%{ text-shadow:0 0 8px rgba(255,85,119,.5); }
+  100%{ text-shadow:0 0 18px rgba(255,85,119,.9), 0 0 6px rgba(255,200,210,.6); }
+}
+
+/* ===== 修复度 HUD（HUD 第三圈） ===== */
+.round-hud .rh-rep-ring{
+  fill:none;
+  stroke:#ffd66b;
+  stroke-width:3;
+  stroke-linecap:round;
+  stroke-dasharray:0 188.5;
+  transform:rotate(-90deg);
+  transform-origin:60px 60px;
+  filter:drop-shadow(0 0 6px rgba(255,214,107,.7));
+  transition:stroke-dasharray .6s ease;
+}
+.round-hud .rh-rep-num{
+  position:absolute;
+  top:-10px; left:50%; transform:translateX(-50%);
+  padding:2px 8px; border-radius:8px;
+  background:rgba(0,0,0,.7);
+  font-size:9px; letter-spacing:.5px;
+  color:#ffd66b;
+  border:1px solid rgba(255,214,107,.5);
+  white-space:nowrap;
+}
+
+/* 章节树里关键记忆缺失提示 */
+.tree-row.missing-key .tree-card-body{
+  position:relative;
+}
+.tree-row.missing-key .tree-card-body::after{
+  content:"⚠ 此章有遗漏关键记忆";
+  position:absolute;
+  right:10px; top:50%; transform:translateY(-50%);
+  font-size:10px;
+  background:rgba(255,165,0,.18);
+  color:#ffa500;
+  padding:3px 8px;
+  border-radius:10px;
+  border:1px solid rgba(255,165,0,.4);
+  white-space:nowrap;
+}
+@media (max-width: 520px){
+  .tree-row.missing-key .tree-card-body::after{
+    content:"⚠";
+    font-size:14px;
+    padding:2px 6px;
+  }
+}
+
+/* 重看序章按钮（设置页用） */
+.replay-prologue{
+  margin-top:8px;
+  background:rgba(125,77,255,.2);
+  border:1px solid rgba(125,77,255,.5);
+  color:#fff;
+  padding:8px 18px;
+  border-radius:18px;
+  cursor:pointer;
+  font-size:13px;
+  letter-spacing:1px;
+}
+.replay-prologue:hover{
+  background:rgba(125,77,255,.4);
+}
