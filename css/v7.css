@@ -626,3 +626,43 @@ h2, h3, .pl-title-main, .pl-keyline {
   background:rgba(125,77,255,.25);
   border-color:rgba(125,77,255,.55);
 }
+
+/* ============= v7.7 / 2026-05-26：移动端工具栏与菜单适配 ============= */
+/* 把 ≡ 菜单按钮强制贴到屏幕真正的右上角，避免和 round-hud 视觉冲突 */
+#game-screen .hud-top .hud-right{
+  position:absolute; top:8px; right:10px;
+  z-index:9;  /* 高于 round-hud(z-index:8) */
+}
+#game-screen .hud-top .hud-right .hud-btn{
+  background:rgba(0,0,0,.6);
+  backdrop-filter: blur(8px);
+  border:1px solid rgba(255,255,255,.25);
+  box-shadow:0 2px 8px rgba(0,0,0,.45);
+}
+
+/* 移动端：底部 6 按钮缩字号 + 压紧 + icon 缩小 */
+@media (max-width:520px){
+  .hud-bottom{ gap:3px; padding:6px 4px; }
+  .tool-btn{
+    padding:5px 7px 5px 6px;
+    font-size:10px;
+    letter-spacing:.05em;
+    gap:3px;
+    border-radius:5px;
+  }
+  .tool-btn .tb-ico{
+    width:15px; height:15px; font-size:9px;
+  }
+  /* 圆形 HUD 上移并稍微变小避让小屏菜单 */
+  #game-screen .round-hud{ top:48px; right:8px; }
+}
+@media (max-width:380px){
+  .tool-btn{
+    padding:4px 5px;
+    font-size:9px;
+    letter-spacing:0;
+  }
+  .tool-btn .tb-ico{
+    width:13px; height:13px; font-size:8px;
+  }
+}
