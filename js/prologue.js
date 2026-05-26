@@ -43,9 +43,9 @@ window.Prologue = (function(){
     { type:"prologue_voice", text:"" },
     { type:"prologue_choice", text:"系统在你眼前展开三份档案。请选择今晚要进入的人。",
       options:[
-        { label:"千夜", route:"qianye", archive:"A-07", meta:"28 岁 / 银发 / 神经科学家", tag:"主线推荐 · 完整 13 章 + 多结局", img:"assets/portraits/qianye.png" },
-        { label:"云璃", route:"yunli", archive:"B-13", meta:"26 岁 / 红发 / 机械工程师", tag:"开发中 · 当前可体验序章", img:"assets/portraits/yunli.png" },
-        { label:"音", route:"yin", archive:"C-21", meta:"30 岁 / 银发 / 档案守护者", tag:"开发中 · 当前可体验序章", img:"assets/portraits/yin.png" }
+        { label:"千夜", route:"qianye", archive:"A-07", meta:"28 岁 / 银发 / 神经科学家", tag:"理性 · 失忆的天才", img:"assets/portraits/qianye.png" },
+        { label:"云璃", route:"yunli", archive:"B-13", meta:"26 岁 / 粉发 / 机械工程师", tag:"感性 · 鬼马的引擎学徒", img:"assets/portraits/yunli.png" },
+        { label:"银",   route:"yin",   archive:"C-21", meta:"30 岁 / 银发 / 沉默守夜人", tag:"反差 · 半身义体的星图持有者", img:"assets/portraits/yin.png" }
       ]
     },
     { type:"prologue_narr", text:"——你做出了选择。" },

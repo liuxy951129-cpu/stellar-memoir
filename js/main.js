@@ -137,10 +137,28 @@
 
       case "menu":
         UI.modal({
-          title:"菜单",
-          body:`<p>当前章节进度已自动保存。</p>
-                <p>体力：<b style="color:#3ad6ff;">${save.stamina}/${Sys.MAX_STAMINA}</b></p>
-                <p>每章消耗 <b>3</b> 体力。每分钟回 1。</p>`,
+          title:"修复师面板",
+          body:`<p style="line-height:1.7;">当前章节进度已自动保存。</p>
+                <p style="line-height:1.7;color:#a9b3ff;">— 你随时可以查看身份档案，或返回主菜单。</p>
+                <p style="line-height:1.7;color:#ff77c8;font-size:12px;">⚠ 返回主菜单将丢失未保存进度。请先「存档」。</p>
+                <div class="modal-menu-actions">
+                  <button class="btn-ghost" data-action="open-profile-from-menu">📁 查看档案</button>
+                  <button class="btn-ghost" data-action="back-to-title-confirm">⌂ 返回主菜单</button>
+                </div>`,
+          onOk: ()=>{ UI.closeModal(); }
+        });
+        break;
+      case "open-profile-from-menu":
+        UI.closeModal();
+        UI.renderProfile(save);
+        UI.switchScreen("profile-screen");
+        break;
+      case "back-to-title-confirm":
+        UI.closeModal();
+        UI.modal({
+          title:"返回主菜单？",
+          body:`<p>未保存的进度将会丢失。</p>
+                <p style="color:#ffd66b;">建议先点底部「存档」按钮。</p>`,
           onOk: ()=>{ UI.switchScreen("title-screen"); UI.closeModal(); }
         });
         break;

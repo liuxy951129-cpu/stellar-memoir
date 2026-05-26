@@ -590,3 +590,39 @@ h2, h3, .pl-title-main, .pl-keyline {
   display: none !important;
   content: none !important;
 }
+
+/* ============= v7.6 / 2026-05-26 ============= */
+/* 底部按钮加 icon */
+.tool-btn{
+  display:inline-flex; align-items:center; gap:6px;
+  padding:7px 14px 7px 10px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.18);
+  backdrop-filter: blur(8px);
+}
+.tool-btn .tb-ico{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:20px; height:20px; border-radius:50%;
+  background:rgba(255,255,255,.18);
+  color:#fff; font-size:11px; line-height:1;
+  font-family: -apple-system, sans-serif;
+}
+.tool-btn:hover .tb-ico{ background:rgba(255,255,255,.32); }
+.tool-btn.active .tb-ico{ background:rgba(255,255,255,.85); color:#3a1f5e; }
+
+/* 右上角菜单内部动作按钮 */
+.modal-menu-actions{
+  margin-top:14px;
+  display:flex; flex-direction:column; gap:8px;
+}
+.modal-menu-actions .btn-ghost{
+  width:100%; text-align:left; padding:10px 14px;
+  border:1px solid rgba(255,255,255,.18);
+  background:rgba(255,255,255,.05);
+  color:#dfe6ff; font-size:13px; letter-spacing:.1em;
+  border-radius:6px; cursor:pointer;
+}
+.modal-menu-actions .btn-ghost:hover{
+  background:rgba(125,77,255,.25);
+  border-color:rgba(125,77,255,.55);
+}
