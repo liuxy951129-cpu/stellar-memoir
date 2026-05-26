@@ -1,14 +1,5 @@
-/* ============ 剧情数据 v3 · 三线串联 + 玩家暗线 ============
- * step 新增类型：
- *   { type:"anomaly", text, clue?, exp? }   // 触发右上角异常 + 收线索
- *   { type:"player_silhouette", text }        // 显示玩家剪影 + 一句话
- *   { type:"player_reveal" }                  // 揭示玩家立绘
- * ================================================================= */
-
+/* ============ 剧情数据 v3.1 · 完整重写 ============ */
 window.STORY = {
-  /* ===========================
-   *  千夜线（理性 · 第一条主线）
-   * =========================== */
   qianye: [
     { type:"chapter", day:1, name:"第一章 · 醒来", en:"Chapter 1 · Awakening", scene:"deck" },
     { type:"narr", scene:"deck", text:"星舰「忘川号」漂浮在猎户臂的边缘。十二年了，乘客舱里仍维持着零下 196 度的沉睡。" },
@@ -22,9 +13,9 @@ window.STORY = {
     { type:"line", who:"player", text:"……没变。还是 9.81。" },
     { type:"line", who:"qianye", exp:"smile", text:"那就好。看来宇宙学常数也没变。我可以放心地开始忘记了。" },
     { type:"choice", options:[
-      { text:"「修复师在场，请允许我引导你回忆。」「, aff:{qianye:2}, next:」q_d1_pro" },
-      { text:"「你不是刚醒吗？怎么一开口就是公式？」「, aff:{qianye:1}, next:」q_d1_funny" },
-      { text:"「……你叫什么名字？」「, aff:{qianye:0}, next:」q_d1_basic" }
+      { text:"修复师在场，请允许我引导你回忆。", aff:{qianye:2}, next:"q_d1_pro" },
+      { text:"你不是刚醒吗？怎么一开口就是公式？", aff:{qianye:1}, next:"q_d1_funny" },
+      { text:"……你叫什么名字？", aff:{qianye:0}, next:"q_d1_basic" }
     ]},
     { type:"label", id:"q_d1_funny" },
     { type:"line", who:"qianye", exp:"smile", text:"公式是我唯一确定的东西。其他的，都消失在黑洞里了。" },
@@ -40,15 +31,15 @@ window.STORY = {
 
     { type:"label", id:"q_d1_main" },
     { type:"line", who:"qianye", exp:"calm", text:"修复师，先听我说。我只记得三件事。" },
-    { type:"line", who:"qianye", exp:"calm", text:"第一，我做过的最后一个实验：「跨星际记忆迁移」。" },
+    { type:"line", who:"qianye", exp:"calm", text:"第一，我做过的最后一个实验：跨星际记忆迁移。" },
     { type:"line", who:"qianye", exp:"calm", text:"第二，银河旋臂的进动周期是 2.46 亿年。" },
-    { type:"line", who:"qianye", exp:"sad", text:"第三，一句话——「答应我，下一次相遇，你要先认出我。」" },
+    { type:"line", who:"qianye", exp:"sad", text:"第三，一句话——答应我，下一次相遇，你要先认出我。" },
     { type:"line", who:"qianye", exp:"calm", text:"我不知道是谁说的。也许是我。" },
     { type:"line", who:"player", text:"……我会帮你找回那个人。" },
     { type:"choice", options:[
-      { text:"「就算这是你给自己留的谎言。」「, aff:{qianye:2}, next:」q_d1_after_vow" },
-      { text:"「就算那个人，是我。」「, aff:{qianye:3}, flag:」hint_self_q", stage:1, next:"q_d1_after_vow" },
-      { text:"「但请先告诉我，你为什么主动选择失忆。」「, aff:{qianye:2}, next:」q_d1_why_forget" }
+      { text:"就算这是你给自己留的谎言。", aff:{qianye:2}, next:"q_d1_after_vow" },
+      { text:"就算那个人，是我。", aff:{qianye:3}, flag:"hint_self_q", stage:1, next:"q_d1_after_vow" },
+      { text:"但请先告诉我，你为什么主动选择失忆。", aff:{qianye:2}, next:"q_d1_why_forget" }
     ]},
     { type:"label", id:"q_d1_why_forget" },
     { type:"line", who:"qianye", exp:"sad", text:"……敏锐。" },
@@ -57,21 +48,20 @@ window.STORY = {
     { type:"jump", to:"q_d1_after_vow" },
     { type:"label", id:"q_d1_after_vow" },
     { type:"line", who:"qianye", exp:"smile", text:"修复师，我喜欢你的工作态度。" },
-    { type:"line", who:"qianye", exp:"calm", text:"今天先到这里。我需要重新熟悉自己的身体——脱水了 12 年的肌肉，握紧拳头都会颤。" },
+    { type:"line", who:"qianye", exp:"calm", text:"今天先到这里。" },
     { type:"line", who:"player", text:"明天我再过来。" },
-    { type:"line", who:"qianye", exp:"smile", text:"嗯。带一杯咖啡。如果星舰还能造出咖啡的话。" },
-    { type:"cg", id:"qianye_cg1", title:"第一次对望「, scene:」deck", img:"qianye" },
-    { type:"mail", id:"sys_d1", role:"system", title:"修复师任务派发「, body:」任务：与 A-07（林千夜）建立信任关系。完成第一日访谈奖励：星币 +50。" },
+    { type:"line", who:"qianye", exp:"smile", text:"嗯。带一杯咖啡。" },
+    { type:"cg", id:"qianye_cg1", title:"第一次对望", scene:"deck", img:"qianye_d1" },
+    { type:"mail", id:"sys_d1", role:"system", title:"修复师任务派发", body:"任务：与 A-07（林千夜）建立信任关系。完成第一日访谈奖励：星币 +50。" },
     { type:"narr", text:"=== Day 1 结束 · 修复进度 8% ===" },
 
-    /* Day 1.5 日常 · 咖啡 */
     { type:"chapter", day:1, name:"日常 · 一杯咖啡", en:"Daily · The Coffee", scene:"cabin" },
     { type:"narr", scene:"cabin", text:"傍晚。你在合成厨房里站了 20 分钟。" },
-    { type:"line", who:"narrator", text:"「检测到使用者血液中咖啡因浓度过低。配方建议：A）速效 B）耐心慢冲 C）加点白兰地？」" },
+    { type:"line", who:"narrator", text:"检测到使用者血液中咖啡因浓度过低。配方建议：A 速效 / B 耐心慢冲 / C 加点白兰地。" },
     { type:"choice", options:[
-      { text:"A · 速效配方「, aff:{qianye:0}, next:」q_coffee_after" },
-      { text:"B · 耐心慢冲「, aff:{qianye:2}, gift:」coffee_slow", next:"q_coffee_after" },
-      { text:"C · 加点白兰地（成年人的浪漫）「, aff:{qianye:2}, gift:」coffee_brandy", next:"q_coffee_after" }
+      { text:"A · 速效配方", aff:{qianye:0}, next:"q_coffee_after" },
+      { text:"B · 耐心慢冲", aff:{qianye:2}, gift:"coffee_slow", next:"q_coffee_after" },
+      { text:"C · 加点白兰地（成年人的浪漫）", aff:{qianye:2}, gift:"coffee_brandy", next:"q_coffee_after" }
     ]},
     { type:"label", id:"q_coffee_after" },
     { type:"line", who:"qianye", exp:"smile", scene:"cabin", text:"……你真的来了。我以为这是你专业范本里的话。" },
@@ -81,7 +71,6 @@ window.STORY = {
     { type:"line", who:"qianye", exp:"calm", text:"……奇怪。" },
     { type:"narr", text:"=== 日常结束 ===" },
 
-    /* Day 2 · 走廊里的常数 */
     { type:"chapter", day:2, name:"第二章 · 走廊里的常数", en:"Chapter 2 · The Constant Hallway", scene:"corridor" },
     { type:"narr", scene:"corridor", text:"第二天。你刚走到甲板 7 走廊，就看见她——已经在那里等你。" },
     { type:"line", who:"qianye", exp:"calm", scene:"corridor", text:"你迟到了 3 分 12 秒。" },
@@ -91,17 +80,16 @@ window.STORY = {
     { type:"line", who:"player", text:"你想去看看？" },
     { type:"line", who:"qianye", exp:"smile", text:"船上有一个全息花园，能模拟任何天气。" },
     { type:"choice", options:[
-      { text:"「那现在就去。」「, aff:{qianye:2}, next:」q_d2_go" },
-      { text:"「你想下雨，我们就让它下。」「, aff:{qianye:3}, flag:」romantic_q", stage:1, next:"q_d2_go" },
-      { text:"「先和你玩个小游戏，测一下你的记忆响应速度。」「, aff:{qianye:2}, mini:」qy", next:"q_d2_go" }
+      { text:"那现在就去。", aff:{qianye:2}, next:"q_d2_go" },
+      { text:"你想下雨，我们就让它下。", aff:{qianye:3}, flag:"romantic_q", stage:1, next:"q_d2_go" },
+      { text:"先和你玩个小游戏。", aff:{qianye:2}, mini:"qy", next:"q_d2_go" }
     ]},
-
     { type:"label", id:"q_d2_go" },
     { type:"narr", scene:"garden", fx:"rain", text:"全息花园 · 雨。雨落在皮肤上是温的，因为这是模拟。" },
     { type:"line", who:"qianye", exp:"calm", scene:"garden", fx:"rain", text:"你知道为什么人类会觉得雨声让人安静吗？因为它是 1/f 噪音。" },
-    { type:"line", who:"qianye", exp:"smile", text:"听起来像是「白噪音被自然温柔化」之后的产物。" },
+    { type:"line", who:"qianye", exp:"smile", text:"听起来像是白噪音被自然温柔化之后的产物。" },
     { type:"line", who:"qianye", exp:"sad", text:"……我想起来一件事。" },
-    { type:"line", who:"qianye", exp:"sad", text:"那个让我「认出他」的人——他也是修复师。" },
+    { type:"line", who:"qianye", exp:"sad", text:"那个让我认出他的人——他也是修复师。" },
     { type:"line", who:"player", text:"（心跳错了一拍。）" },
     { type:"line", who:"qianye", exp:"sad", text:"修复师……你戴过眼镜吗？" },
     { type:"line", who:"player", text:"……？没有。" },
@@ -110,37 +98,35 @@ window.STORY = {
     { type:"line", who:"player", text:"（你忽然想起来——身份照里，你确实戴过一副眼镜。可你从不记得为什么。）" },
     { type:"line", who:"qianye", exp:"smile", text:"——只想问你，你愿意成为下一个吗？" },
     { type:"choice", options:[
-      { text:"「我愿意。」「, aff:{qianye:3}, flag:」vow_q", stage:1, next:"q_d2_after_vow" },
-      { text:"「先让我修好你，我们再谈。」「, aff:{qianye:1}, next:」q_d2_after_vow" },
-      { text:"「我会让你失望。」「, aff:{qianye:-2}, next:」q_d2_after_reject" }
+      { text:"我愿意。", aff:{qianye:3}, flag:"vow_q", stage:1, next:"q_d2_after_vow" },
+      { text:"先让我修好你，我们再谈。", aff:{qianye:1}, next:"q_d2_after_vow" },
+      { text:"我会让你失望。", aff:{qianye:-2}, next:"q_d2_after_reject" }
     ]},
     { type:"label", id:"q_d2_after_reject" },
     { type:"line", who:"qianye", exp:"sad", text:"……好。你是个诚实的人。" },
     { type:"jump", to:"q_d2_close" },
     { type:"label", id:"q_d2_after_vow" },
-    { type:"line", who:"qianye", exp:"shy", text:"……不用真的「成为他」。只要是你就行。" },
+    { type:"line", who:"qianye", exp:"shy", text:"……不用真的成为他。只要是你就行。" },
     { type:"label", id:"q_d2_close" },
-    { type:"cg", id:"qianye_cg2", title:"全息雨中的承诺「, scene:」garden", img:"qianye_he" },
+    { type:"cg", id:"qianye_cg2", title:"全息雨中的承诺", scene:"garden", img:"qianye_d2" },
     { type:"narr", text:"=== Day 2 结束 · 修复进度 47% ===" },
 
-    /* Day 2.5 日常 · 小游戏 */
     { type:"chapter", day:2, name:"日常 · 记忆碎片", en:"Daily · Memory Shards", scene:"cabin" },
     { type:"narr", scene:"cabin", text:"晚上。她说她睡不着。" },
     { type:"choice", options:[
-      { text:"「来一局记忆碎片连线。」「, aff:{qianye:2}, mini:」qy", next:"q_d2_5_after" },
-      { text:"「送你一束花。」「, aff:{qianye:2}, gift:」flower", next:"q_d2_5_after" },
-      { text:"「我陪你视频，直到你睡着。」「, aff:{qianye:3}, flag:」sleep_call_q", stage:1, next:"q_d2_5_after" }
+      { text:"来一局记忆碎片连线。", aff:{qianye:2}, mini:"qy", next:"q_d2_5_after" },
+      { text:"送你一束花。", aff:{qianye:2}, gift:"flower", next:"q_d2_5_after" },
+      { text:"我陪你视频，直到你睡着。", aff:{qianye:3}, flag:"sleep_call_q", stage:1, next:"q_d2_5_after" }
     ]},
     { type:"label", id:"q_d2_5_after" },
     { type:"narr", text:"=== 日常结束 ===" },
 
-    /* Day 3 · 同一个常数 */
     { type:"chapter", day:3, name:"第三章 · 同一个常数", en:"Chapter 3 · Same Constant", scene:"archive" },
     { type:"narr", scene:"archive", text:"星舰档案库。最深一层。墙上排列着上百个发光的记忆胶囊。" },
     { type:"line", who:"qianye", exp:"calm", scene:"archive", text:"它需要两个人的脉搏才能打开。" },
-    { type:"line", who:"qianye", exp:"smile", text:"系统登记的另一个人，是「未来某天的你」。" },
+    { type:"line", who:"qianye", exp:"smile", text:"系统登记的另一个人，是未来某天的你。" },
     { type:"line", who:"player", text:"……？" },
-    { type:"line", who:"qianye", exp:"calm", text:"12 年前，我把自己的记忆，提前传送到了「未来与我相遇的人」的脑中——也就是你。" },
+    { type:"line", who:"qianye", exp:"calm", text:"12 年前，我把自己的记忆，提前传送到了未来与我相遇的人脑中——也就是你。" },
     { type:"line", who:"qianye", exp:"calm", text:"所以你才会一开始就觉得：似乎认识我。" },
     { type:"line", who:"qianye", exp:"calm", text:"但这件事还有第二个人参与。" },
     { type:"line", who:"player", text:"——谁？" },
@@ -148,24 +134,19 @@ window.STORY = {
     { type:"line", who:"qianye", exp:"sad", text:"和你工作牌上的那道——一模一样。" },
     { type:"line", who:"player", text:"（你的心跳，开始异常。）" },
     { type:"choice", options:[
-      { text:"「把手伸过来。」「, aff:{qianye:3}, next:」q_d3_open" },
-      { text:"「等等，我需要查一下我自己的档案。」「, aff:{qianye:1}, flag:」clue_a08", next:"q_d3_open" },
-      { text:"「让我看看你那张签字纸。」「, aff:{qianye:2}, flag:」clue_eyes", next:"q_d3_open" }
+      { text:"把手伸过来。", aff:{qianye:3}, next:"q_d3_open" },
+      { text:"等等，我需要查一下我自己的档案。", aff:{qianye:1}, flag:"clue_a08", next:"q_d3_open" },
+      { text:"让我看看你那张签字纸。", aff:{qianye:2}, flag:"clue_eyes", next:"q_d3_open" }
     ]},
     { type:"label", id:"q_d3_open" },
     { type:"narr", scene:"archive", fx:"flash", text:"——锁开了。光从胸口溢出来。" },
-    { type:"narr", scene:"archive", text:"你看见 12 年前的她，对镜头说：「未来的你，无论你叫什么名字——先认出我。」" },
+    { type:"narr", scene:"archive", text:"你看见 12 年前的她，对镜头说：未来的你，无论你叫什么名字——先认出我。" },
     { type:"line", who:"qianye", exp:"smile", scene:"archive", text:"……终于，我把自己交还给你了。" },
-    { type:"cg", id:"qianye_cg3", title:"同一个常数「, scene:」archive", img:"qianye_he" },
-    { type:"end", tag:"HE", title:"恒星轨道",
-      en:"Stellar Orbit · True End",
+    { type:"cg", id:"qianye_cg3", title:"同一个常数", scene:"archive", img:"qianye_he" },
+    { type:"end", tag:"HE", title:"恒星轨道", en:"Stellar Orbit · True End",
       body:"她最终选择把记忆全部交给你保管。\n你陪她重新研究——下一次相遇，仍然是你先认出她。\n\n但当你回到舱室的那一晚，工作牌上的刻痕，开始隐约闪光。" }
   ],
 
-  /* ===========================
-   *  云璃线
-   *  从第二线开始，玩家暗线越来越明显（B 节奏）
-   * =========================== */
   yunli: [
     { type:"chapter", day:1, name:"第一章 · 跳碎了的玻璃", en:"Chapter 1 · Shattered Stage", scene:"corridor" },
     { type:"narr", scene:"corridor", text:"凌晨 3:17。星舰内警报响起。你冲进甲板 4 走廊。" },
@@ -173,58 +154,56 @@ window.STORY = {
     { type:"line", who:"yunli", exp:"smile", scene:"corridor", text:"嘿~ 你也是来看演出的吗？" },
     { type:"line", who:"player", text:"……你的脚在流血。" },
     { type:"line", who:"yunli", exp:"smile", text:"哎呀真的~ 我叫云璃，Yunli。" },
-    { type:"anomaly", text:"⚠ 系统异常 · 来自 A-08 的脑波同步信号「, clue:」clue_a08" },
-    { type:"line", who:"player", text:"（你忽然听见耳机里「咔哒」一声。但你没戴耳机。）" },
+    { type:"anomaly", text:"⚠ 系统异常 · 来自 A-08 的脑波同步信号", clue:"clue_a08" },
+    { type:"line", who:"player", text:"（你忽然听见耳机里咔哒一声。但你没戴耳机。）" },
     { type:"choice", options:[
-      { text:"「先停下，我帮你包扎。」「, aff:{yunli:2}, next:」y_d1_care" },
-      { text:"「跳完吧，我看完再带你去医务室。」「, aff:{yunli:3}, flag:」witness_y", stage:1, next:"y_d1_dance" },
-      { text:"「不准跳——这是命令。」「, aff:{yunli:-1}, next:」y_d1_care" }
+      { text:"先停下，我帮你包扎。", aff:{yunli:2}, next:"y_d1_care" },
+      { text:"跳完吧，我看完再带你去医务室。", aff:{yunli:3}, flag:"witness_y", stage:1, next:"y_d1_dance" },
+      { text:"不准跳——这是命令。", aff:{yunli:-1}, next:"y_d1_care" }
     ]},
     { type:"label", id:"y_d1_dance" },
     { type:"narr", scene:"corridor", fx:"petals", text:"她跳完最后一个旋转，停在你面前。" },
-    { type:"line", who:"yunli", exp:"sad", text:"……谢谢你看完。其实，这是我「最后的舞台」。" },
+    { type:"line", who:"yunli", exp:"sad", text:"……谢谢你看完。其实，这是我最后的舞台。" },
     { type:"jump", to:"y_d1_main" },
     { type:"label", id:"y_d1_care" },
     { type:"line", who:"yunli", exp:"smile", text:"啊呀，这位修复师好凶哦~ 不过……我让你包。" },
     { type:"jump", to:"y_d1_main" },
     { type:"label", id:"y_d1_main" },
     { type:"narr", scene:"cabin", text:"医务舱。她坐在床沿，把绷带绕在你手腕上——尽管受伤的是她。" },
-    { type:"line", who:"yunli", exp:"smile", scene:"cabin", text:"「最后的舞台」是我醒来记得的唯一一句话。" },
+    { type:"line", who:"yunli", exp:"smile", scene:"cabin", text:"最后的舞台是我醒来记得的唯一一句话。" },
     { type:"line", who:"yunli", exp:"smile", text:"——欸，修复师，你哼的那段旋律是什么？" },
     { type:"line", who:"player", text:"我没哼啊。" },
     { type:"line", who:"yunli", exp:"calm", text:"明明就在哼。是我以前演出的开场曲。你怎么会知道？" },
-    { type:"line", who:"player", text:"（你脑子里「嗡」地响了一下。你确实……听过这首歌。）" },
-    { type:"anomaly", text:"⚠ 异常记忆波动 · 你认识这段旋律「, clue:」clue_dance" },
+    { type:"line", who:"player", text:"（你脑子里嗡地响了一下。你确实听过这首歌。）" },
+    { type:"anomaly", text:"⚠ 异常记忆波动 · 你认识这段旋律", clue:"clue_dance" },
     { type:"choice", options:[
-      { text:"「也许我们以前见过。」「, aff:{yunli:2}, flag:」meet_before_y", next:"y_d1_now" },
-      { text:"「也许你哼过给我听。」「, aff:{yunli:1}, next:」y_d1_now" },
-      { text:"「我陪你一起找回来。」「, aff:{yunli:3}, flag:」with_y", stage:1, next:"y_d1_now" }
+      { text:"也许我们以前见过。", aff:{yunli:2}, flag:"meet_before_y", next:"y_d1_now" },
+      { text:"也许你哼过给我听。", aff:{yunli:1}, next:"y_d1_now" },
+      { text:"我陪你一起找回来。", aff:{yunli:3}, flag:"with_y", stage:1, next:"y_d1_now" }
     ]},
     { type:"label", id:"y_d1_now" },
     { type:"line", who:"yunli", exp:"smile", text:"……你这种人，真讨厌。一句话就让人想哭。" },
-    { type:"cg", id:"yunli_cg1", title:"医务舱里的绷带「, scene:」cabin", img:"yunli" },
+    { type:"cg", id:"yunli_cg1", title:"医务舱里的绷带", scene:"cabin", img:"yunli_d1" },
     { type:"narr", text:"=== Day 1 结束 · 修复进度 12% ===" },
 
-    /* Day 1.5 节拍小游戏 */
     { type:"chapter", day:1, name:"日常 · 第一次合拍", en:"Daily · First Beat", scene:"cabin" },
-    { type:"narr", scene:"cabin", text:"她发消息：「修复师，我教你一个简单的舞步！」" },
+    { type:"narr", scene:"cabin", text:"她发消息：修复师，我教你一个简单的舞步。" },
     { type:"choice", options:[
-      { text:"「来。一局节拍游戏。」「, aff:{yunli:2}, mini:」yl", next:"y_d1_5_after" },
-      { text:"「送你点小礼物吧。」「, aff:{yunli:1}, gift:」snack", next:"y_d1_5_after" },
-      { text:"「我看你跳就好。」「, aff:{yunli:1}, next:」y_d1_5_after" }
+      { text:"来。一局节拍游戏。", aff:{yunli:2}, mini:"yl", next:"y_d1_5_after" },
+      { text:"送你点小礼物吧。", aff:{yunli:1}, gift:"snack", next:"y_d1_5_after" },
+      { text:"我看你跳就好。", aff:{yunli:1}, next:"y_d1_5_after" }
     ]},
     { type:"label", id:"y_d1_5_after" },
     { type:"narr", text:"=== 日常结束 ===" },
 
-    /* Day 2 · 全息废墟 */
     { type:"chapter", day:2, name:"第二章 · 全息废墟", en:"Chapter 2 · Holographic Ruins", scene:"deck" },
     { type:"narr", scene:"deck", text:"第二天。她非要拉你去看观景台。" },
     { type:"line", who:"yunli", exp:"smile", scene:"deck", text:"看~ 那颗会闪三下的星。我以前给它起过名字。叫「我」。" },
     { type:"line", who:"yunli", exp:"smile", text:"因为我也总在被人忘记之前，先闪三下提醒一下。" },
     { type:"choice", options:[
-      { text:"「我不会忘。」「, aff:{yunli:3}, flag:」promise_y", stage:1, next:"y_d2_a" },
-      { text:"「那现在闪给我看。」「, aff:{yunli:2}, next:」y_d2_a" },
-      { text:"「……」（把手放在她手上）「, aff:{yunli:3}, flag:」hand_y", stage:1, next:"y_d2_a" }
+      { text:"我不会忘。", aff:{yunli:3}, flag:"promise_y", stage:1, next:"y_d2_a" },
+      { text:"那现在闪给我看。", aff:{yunli:2}, next:"y_d2_a" },
+      { text:"……（把手放在她手上）", aff:{yunli:3}, flag:"hand_y", stage:1, next:"y_d2_a" }
     ]},
     { type:"label", id:"y_d2_a" },
     { type:"narr", scene:"deck", text:"她突然蹲下来，捂住了头。" },
@@ -234,70 +213,64 @@ window.STORY = {
     { type:"line", who:"yunli", exp:"sad", text:"我搭档姓林。" },
     { type:"line", who:"player", text:"……？" },
     { type:"line", who:"yunli", exp:"sad", text:"林千夜的妹妹。" },
-    { type:"anomaly", text:"⚠ 时间线交叉警告 · 三人原本认识「, clue:」clue_dance" },
-    { type:"line", who:"player", text:"（你忽然意识到——千夜在第二天问你「你戴过眼镜吗」。也许，她认识当年舞台上死的那个人。也许——那个人也认识你。）" },
+    { type:"anomaly", text:"⚠ 时间线交叉警告 · 三人原本认识", clue:"clue_dance" },
+    { type:"line", who:"player", text:"（你忽然意识到——千夜也许认识当年舞台上死的那个人。也许那个人也认识你。）" },
     { type:"choice", options:[
-      { text:"「不是你的错。」「, aff:{yunli:1}, next:」y_d2_close" },
-      { text:"「就算是你的错，我也陪你扛。」「, aff:{yunli:3}, flag:」share_y", stage:1, next:"y_d2_close" },
-      { text:"「告诉我你姐姐的名字。」「, aff:{yunli:2}, flag:」clue_dance", next:"y_d2_close" },
-      { text:"（一句不说，紧紧抱住她。）「, aff:{yunli:3}, flag:」hug_y", stage:1, next:"y_d2_close" }
+      { text:"不是你的错。", aff:{yunli:1}, next:"y_d2_close" },
+      { text:"就算是你的错，我也陪你扛。", aff:{yunli:3}, flag:"share_y", stage:1, next:"y_d2_close" },
+      { text:"告诉我你姐姐的名字。", aff:{yunli:2}, flag:"clue_dance", next:"y_d2_close" },
+      { text:"（一句不说，紧紧抱住她。）", aff:{yunli:3}, flag:"hug_y", stage:1, next:"y_d2_close" }
     ]},
     { type:"label", id:"y_d2_close" },
     { type:"line", who:"yunli", exp:"smile", text:"……谢谢你。" },
-    { type:"cg", id:"yunli_cg2", title:"会闪三下的星「, scene:」deck", img:"yunli" },
+    { type:"cg", id:"yunli_cg2", title:"会闪三下的星", scene:"deck", img:"yunli_d2" },
     { type:"narr", text:"=== Day 2 结束 · 修复进度 51% ===" },
 
-    /* Day 2.5 送礼日常 */
     { type:"chapter", day:2, name:"日常 · 给云璃送点什么", en:"Daily · A Little Something", scene:"cabin" },
     { type:"narr", scene:"cabin", text:"她说她明天要重新登台。" },
     { type:"choice", options:[
-      { text:"送你一颗星 · HD-218396 改名为「你」「, aff:{yunli:3}, flag:」star_gift", stage:1, next:"y_d2_5_after" },
-      { text:"送一束花。「, aff:{yunli:2}, gift:」flower", next:"y_d2_5_after" },
-      { text:"送你一个录音笔。「, aff:{yunli:2}, gift:」recorder", next:"y_d2_5_after" }
+      { text:"送你一颗星 · HD-218396 改名为「你」。", aff:{yunli:3}, flag:"star_gift", stage:1, next:"y_d2_5_after" },
+      { text:"送一束花。", aff:{yunli:2}, gift:"flower", next:"y_d2_5_after" },
+      { text:"送你一个录音笔。", aff:{yunli:2}, gift:"recorder", next:"y_d2_5_after" }
     ]},
     { type:"label", id:"y_d2_5_after" },
     { type:"narr", text:"=== 日常结束 ===" },
 
-    /* Day 3 · 重新登台 */
     { type:"chapter", day:3, name:"第三章 · 重新登台", en:"Chapter 3 · Encore", scene:"cabin" },
     { type:"narr", scene:"cabin", text:"星舰主厅被改造成了一个临时舞台。" },
     { type:"line", who:"yunli", exp:"smile", scene:"cabin", text:"修复师，可以请你来当我的搭档吗？" },
     { type:"line", who:"player", text:"我不会跳。" },
-    { type:"line", who:"yunli", exp:"smile", text:"那刚刚好。你只要站在那里，让我有理由「不再独自跳」。" },
+    { type:"line", who:"yunli", exp:"smile", text:"那刚刚好。你只要站在那里，让我有理由不再独自跳。" },
     { type:"choice", options:[
-      { text:"「好，我来。」「, aff:{yunli:3}, next:」y_d3_dance" },
-      { text:"「我看着你跳，更好。」「, aff:{yunli:1}, next:」y_d3_watch" },
-      { text:"「让我先和你练一遍节拍。」「, aff:{yunli:2}, mini:」yl", next:"y_d3_dance" }
+      { text:"好，我来。", aff:{yunli:3}, next:"y_d3_dance" },
+      { text:"我看着你跳，更好。", aff:{yunli:1}, next:"y_d3_watch" },
+      { text:"让我先和你练一遍节拍。", aff:{yunli:2}, mini:"yl", next:"y_d3_dance" }
     ]},
     { type:"label", id:"y_d3_dance" },
     { type:"narr", scene:"cabin", fx:"petals", text:"她牵着你的手，转了一圈又一圈。" },
     { type:"line", who:"yunli", exp:"shy", text:"……奇怪。" },
     { type:"line", who:"yunli", exp:"shy", text:"你的脚步——和我姐姐一模一样。" },
-    { type:"anomaly", text:"⚠ 玩家身份耦合度 +12%「, clue:」clue_dance" },
+    { type:"anomaly", text:"⚠ 玩家身份耦合度 +12%", clue:"clue_dance" },
     { type:"jump", to:"y_d3_close" },
     { type:"label", id:"y_d3_watch" },
     { type:"narr", scene:"cabin", fx:"petals", text:"她在台上独舞，你在台下，比她更不敢眨眼。" },
     { type:"label", id:"y_d3_close" },
     { type:"line", who:"yunli", exp:"smile", text:"——谢谢你，让我知道。" },
-    { type:"line", who:"yunli", exp:"smile", text:"最后的舞台之后，还能有「再来一次」。" },
-    { type:"cg", id:"yunli_cg3", title:"再来一次「, scene:」cabin", img:"yunli_he" },
-    { type:"end", tag:"HE", title:"安可",
-      en:"Encore · True End",
-      body:"她从此把每一场演出叫做「再来一次」。\n你成了固定观众席第一排的那个人。\n\n第 7 次「再来一次」之后，她在台上向你求婚了。\n\n但她结束时，对着观众席多看了一眼空座位——「姐姐和林千夜……都没来呢。」" }
+    { type:"line", who:"yunli", exp:"smile", text:"最后的舞台之后，还能有再来一次。" },
+    { type:"cg", id:"yunli_cg3", title:"再来一次", scene:"cabin", img:"yunli_he" },
+    { type:"end", tag:"HE", title:"安可", en:"Encore · True End",
+      body:"她从此把每一场演出叫做再来一次。\n你成了固定观众席第一排的那个人。\n\n第 7 次再来一次之后，她在台上向你求婚了。" }
   ],
 
-  /* ===========================
-   *  银线 · 玩家暗线最显著
-   * =========================== */
   yin: [
     { type:"chapter", day:1, name:"第一章 · 不会眨眼的人", en:"Chapter 1 · Never Blinks", scene:"corridor" },
     { type:"narr", scene:"corridor", text:"星舰守卫舱。一个穿着银灰色守卫服的男人靠墙站立。瞳孔里有星图。" },
     { type:"line", who:"yin", exp:"calm", scene:"corridor", text:"……你是新的修复师？" },
     { type:"line", who:"yin", exp:"calm", text:"我不需要修复。" },
     { type:"choice", options:[
-      { text:"「但你登记里写了『请修复我』。」「, aff:{yin:1}, next:」yin_d1_log" },
-      { text:"「那我陪你站一会儿。」「, aff:{yin:2}, flag:」silent_yin", stage:1, next:"yin_d1_silent" },
-      { text:"「你害怕想起什么。」「, aff:{yin:2}, next:」yin_d1_log" }
+      { text:"但你登记里写了请修复我。", aff:{yin:1}, next:"yin_d1_log" },
+      { text:"那我陪你站一会儿。", aff:{yin:2}, flag:"silent_yin", stage:1, next:"yin_d1_silent" },
+      { text:"你害怕想起什么。", aff:{yin:2}, next:"yin_d1_log" }
     ]},
     { type:"label", id:"yin_d1_log" },
     { type:"line", who:"yin", exp:"sad", text:"……那是 12 年前的我写的。我不一定还认得他。" },
@@ -311,39 +284,37 @@ window.STORY = {
     { type:"line", who:"player", text:"为什么？" },
     { type:"line", who:"yin", exp:"sad", text:"……怕里面有一个我不想再失去的人。" },
     { type:"choice", options:[
-      { text:"「我陪你看。」「, aff:{yin:3}, flag:」watch_with", stage:1, next:"yin_d1_close" },
-      { text:"「不看也行。我陪你想别的。」「, aff:{yin:2}, next:」yin_d1_close" },
-      { text:"「也许失去过的，更值得记得。」「, aff:{yin:1}, next:」yin_d1_close" }
+      { text:"我陪你看。", aff:{yin:3}, flag:"watch_with", stage:1, next:"yin_d1_close" },
+      { text:"不看也行。我陪你想别的。", aff:{yin:2}, next:"yin_d1_close" },
+      { text:"也许失去过的，更值得记得。", aff:{yin:1}, next:"yin_d1_close" }
     ]},
     { type:"label", id:"yin_d1_close" },
-    { type:"anomaly", text:"⚠ A-08 神经接口活性提升「, clue:」clue_a08" },
+    { type:"anomaly", text:"⚠ A-08 神经接口活性提升", clue:"clue_a08" },
     { type:"line", who:"yin", exp:"calm", text:"……奇怪。" },
     { type:"line", who:"yin", exp:"calm", text:"我看着你，左眼的图像在重新对焦。" },
     { type:"line", who:"player", text:"（你忽然不敢看他的眼睛。）" },
-    { type:"cg", id:"yin_cg1", title:"金色瞳孔「, scene:」corridor", img:"yin" },
+    { type:"cg", id:"yin_cg1", title:"金色瞳孔", scene:"corridor", img:"yin_d1" },
     { type:"narr", text:"=== Day 1 结束 ===" },
 
-    /* Day 1.5 凝视小游戏 */
     { type:"chapter", day:1, name:"日常 · 不眨眼挑战", en:"Daily · Never Blink", scene:"corridor" },
-    { type:"narr", scene:"corridor", text:"晚上他发信息：「我想试试看，能不能比你先眨眼。」" },
+    { type:"narr", scene:"corridor", text:"晚上他发信息：我想试试看，能不能比你先眨眼。" },
     { type:"choice", options:[
-      { text:"「来。一局凝视游戏。」「, aff:{yin:2}, mini:」yin", next:"yin_d1_5_after" },
-      { text:"送一份装备维护油。「, aff:{yin:1}, gift:」oil", next:"yin_d1_5_after" },
-      { text:"「我想先听你的心跳。」「, aff:{yin:3}, flag:」heartbeat_yin", stage:1, next:"yin_d1_5_after" }
+      { text:"来。一局凝视游戏。", aff:{yin:2}, mini:"yin", next:"yin_d1_5_after" },
+      { text:"送一份装备维护油。", aff:{yin:1}, gift:"oil", next:"yin_d1_5_after" },
+      { text:"我想先听你的心跳。", aff:{yin:3}, flag:"heartbeat_yin", stage:1, next:"yin_d1_5_after" }
     ]},
     { type:"label", id:"yin_d1_5_after" },
     { type:"narr", text:"=== 日常结束 ===" },
 
-    /* Day 2 · 心跳停过 7 次 */
     { type:"chapter", day:2, name:"第二章 · 心跳停过 7 次", en:"Chapter 2 · Seven Stops", scene:"deck" },
     { type:"narr", scene:"deck", text:"第二天。他在观景台等你，手里多了一个机械怀表。" },
     { type:"line", who:"yin", exp:"calm", scene:"deck", text:"我的心脏，是机械的。它停过 7 次。" },
     { type:"line", who:"yin", exp:"calm", text:"每停一次，我会忘掉一段感情。" },
     { type:"line", who:"yin", exp:"sad", text:"是同一个人，我忘了 7 次。" },
     { type:"choice", options:[
-      { text:"「让我看看你的左眼。」「, aff:{yin:3}, flag:」see_yin", stage:1, next:"yin_d2_see" },
-      { text:"「下次停的时候，我陪你。」「, aff:{yin:3}, flag:」stay_yin", stage:1, next:"yin_d2_close" },
-      { text:"「告诉我那个人的名字。」「, aff:{yin:2}, next:」yin_d2_name" }
+      { text:"让我看看你的左眼。", aff:{yin:3}, flag:"see_yin", stage:1, next:"yin_d2_see" },
+      { text:"下次停的时候，我陪你。", aff:{yin:3}, flag:"stay_yin", stage:1, next:"yin_d2_close" },
+      { text:"告诉我那个人的名字。", aff:{yin:2}, next:"yin_d2_name" }
     ]},
     { type:"label", id:"yin_d2_name" },
     { type:"line", who:"yin", exp:"sad", text:"……我说不出。" },
@@ -354,41 +325,39 @@ window.STORY = {
     { type:"narr", scene:"deck", text:"是一张笑脸。每一帧都不一样年龄。" },
     { type:"line", who:"yin", exp:"sad", text:"我不知道她是谁。但每一次重启，我都会先认出她的笑。" },
     { type:"line", who:"player", text:"（……那张脸的轮廓——是你自己。）" },
-    { type:"anomaly", text:"⚠ 玩家身份耦合度 +35%「, clue:」clue_yin_left_eye" },
-    { type:"line", who:"yin", exp:"shocked", text:"……" },
+    { type:"anomaly", text:"⚠ 玩家身份耦合度 +35%", clue:"clue_yin_left_eye" },
+    { type:"line", who:"yin", exp:"sad", text:"……" },
     { type:"line", who:"yin", exp:"sad", text:"等等。这张脸——和你重叠了。" },
     { type:"line", who:"yin", exp:"sad", text:"修复师……你不是新来的。" },
     { type:"line", who:"yin", exp:"sad", text:"你是 12 年前，把我们三个送进胶囊的那个人。" },
     { type:"line", who:"player", text:"（你的世界，开始失重。）" },
     { type:"label", id:"yin_d2_close" },
-    { type:"cg", id:"yin_cg2", title:"机械怀表「, scene:」deck", img:"yin" },
+    { type:"cg", id:"yin_cg2", title:"机械怀表", scene:"deck", img:"yin_d2" },
     { type:"narr", text:"=== Day 2 结束 ===" },
 
-    /* Day 2.5 留住他 */
     { type:"chapter", day:2, name:"日常 · 留住他", en:"Daily · Stay Awake", scene:"cabin" },
     { type:"narr", scene:"cabin", text:"半夜。系统提示：守卫 Y-01 心跳异常预警。" },
     { type:"choice", options:[
-      { text:"「我现在就去他那。」「, aff:{yin:3}, flag:」rush_yin", stage:1, next:"yin_d2_5_after" },
-      { text:"「给他送一杯加糖咖啡。」「, aff:{yin:2}, gift:」coffee_sweet", next:"yin_d2_5_after" },
-      { text:"查一下我自己的档案。「, aff:{yin:0}, flag:」clue_a08", next:"yin_d2_5_after" }
+      { text:"我现在就去他那。", aff:{yin:3}, flag:"rush_yin", stage:1, next:"yin_d2_5_after" },
+      { text:"给他送一杯加糖咖啡。", aff:{yin:2}, gift:"coffee_sweet", next:"yin_d2_5_after" },
+      { text:"查一下我自己的档案。", aff:{yin:0}, flag:"clue_a08", next:"yin_d2_5_after" }
     ]},
     { type:"label", id:"yin_d2_5_after" },
     { type:"narr", text:"=== 日常结束 ===" },
 
-    /* Day 3 · 第八次 */
     { type:"chapter", day:3, name:"第三章 · 第八次", en:"Chapter 3 · The 8th Time", scene:"archive" },
     { type:"narr", scene:"archive", text:"档案库。系统警报：守卫 Y-01 心跳异常，机械心脏即将进入第 8 次停跳。" },
     { type:"line", who:"yin", exp:"sad", scene:"archive", text:"……来了。修复师，听我说。" },
     { type:"line", who:"yin", exp:"sad", text:"我重启之后，会忘掉你。但请你，下次也先认出我。" },
     { type:"choice", options:[
-      { text:"「我会的。」「, aff:{yin:3}, next:」yin_d3_a" },
-      { text:"「你不要重启。我留你。」「, aff:{yin:2}, flag:」stop_restart", next:"yin_d3_b" },
-      { text:"「告诉我——我是不是 A-08。」「, aff:{yin:2}, flag:」clue_a08", next:"yin_d3_truth" }
+      { text:"我会的。", aff:{yin:3}, next:"yin_d3_a" },
+      { text:"你不要重启。我留你。", aff:{yin:2}, flag:"stop_restart", next:"yin_d3_b" },
+      { text:"告诉我——我是不是 A-08。", aff:{yin:2}, flag:"clue_a08", next:"yin_d3_truth" }
     ]},
     { type:"label", id:"yin_d3_truth" },
     { type:"line", who:"yin", exp:"sad", text:"……是。" },
     { type:"line", who:"yin", exp:"sad", text:"你是这艘星舰上，最后一个被治疗的人。" },
-    { type:"line", who:"yin", exp:"sad", text:"系统给了你「修复师」的伪身份，是为了让你以「治别人」的方式，逐步治疗自己。"},
+    { type:"line", who:"yin", exp:"sad", text:"系统给了你修复师的伪身份，是为了让你以治别人的方式，逐步治疗自己。" },
     { type:"line", who:"yin", exp:"smile", text:"我们三个，从一开始就在等你。" },
     { type:"line", who:"player", text:"（……你的呼吸忘记了节奏。）" },
     { type:"jump", to:"yin_d3_a" },
@@ -399,63 +368,58 @@ window.STORY = {
     { type:"narr", scene:"archive", fx:"flash", text:"你按下中止按钮。系统报错。但他还活着，只是会带着痛活下去。" },
     { type:"label", id:"yin_d3_close" },
     { type:"line", who:"yin", exp:"smile", text:"……第 8 次。我先认出了你。" },
-    { type:"cg", id:"yin_cg3", title:"先认出你「, scene:」archive", img:"yin_he" },
-    { type:"end", tag:"HE", title:"第八次重逢",
-      en:"The 8th Reunion · True End",
-      body:"他从此每天醒来，会先看着你说一句「早。」\n这是他训练自己「永远先认出你」的练习。\n\n但你知道——他其实是在替你练习「认出你自己」。" }
+    { type:"cg", id:"yin_cg3", title:"先认出你", scene:"archive", img:"yin_he" },
+    { type:"end", tag:"HE", title:"第八次重逢", en:"The 8th Reunion · True End",
+      body:"他从此每天醒来，会先看着你说一句早。\n这是他训练自己永远先认出你的练习。\n\n但你知道——他其实是在替你练习认出你自己。" }
   ],
 
-  /* ===========================
-   *  真结局线（3 线通关后开启）
-   * =========================== */
-  true: [
-    { type:"chapter", day:1, name:"真结局 · A-08 的最后一日", en:"True Route · The Final Patient", scene:"archive" },
+  "true": [
+    { type:"chapter", day:1, name:"真结局 · A-08 的最后一日", en:"True Route", scene:"archive" },
     { type:"narr", scene:"archive", text:"你按千夜留下的指令，来到档案库最深一层。" },
-    { type:"narr", scene:"archive", text:"墙上排列着 3 个发光的胶囊——A-07、B-12、Y-01。胶囊已经空了，因为 ta 们已经被你修复。" },
+    { type:"narr", scene:"archive", text:"墙上排列着 3 个发光的胶囊——A-07、B-12、Y-01。胶囊已经空了。" },
     { type:"narr", scene:"archive", text:"但还有第四个胶囊，在最里侧，从未被点亮。编号：A-08。" },
     { type:"narr", scene:"archive", fx:"flash", text:"——胶囊主动开启了。里面没有人。但镜面映出了你自己。" },
     { type:"player_silhouette", text:"（一道剪影站在镜里，望着你。）" },
-    { type:"line", who:"unknown", scene:"archive", text:"……你来了。" },
+    { type:"line", who:"narrator", scene:"archive", text:"……你来了。" },
     { type:"line", who:"player", text:"……你是谁？" },
-    { type:"line", who:"unknown", text:"我是你。或者说——我是 12 年前的你。" },
-    { type:"line", who:"unknown", text:"那时候你是这艘星舰的首席记忆迁移工程师。" },
-    { type:"line", who:"unknown", text:"千夜的实验，你做的助手；云璃姐姐的舞台事故，你在场；银的机械心脏，你植入的。" },
-    { type:"line", who:"unknown", text:"你为了不让自己再承受那场事故的负罪感，把自己也封进了胶囊。" },
-    { type:"line", who:"unknown", text:"——只有等三个人都重新好起来，你才允许系统把你叫醒。" },
+    { type:"line", who:"narrator", text:"我是你。或者说——我是 12 年前的你。" },
+    { type:"line", who:"narrator", text:"那时候你是这艘星舰的首席记忆迁移工程师。" },
+    { type:"line", who:"narrator", text:"千夜的实验，你做的助手；云璃姐姐的舞台事故，你在场；银的机械心脏，你植入的。" },
+    { type:"line", who:"narrator", text:"你为了不让自己再承受那场事故的负罪感，把自己也封进了胶囊。" },
+    { type:"line", who:"narrator", text:"——只有等三个人都重新好起来，你才允许系统把你叫醒。" },
     { type:"line", who:"player", text:"……" },
-    { type:"line", who:"unknown", text:"现在，你做到了。" },
+    { type:"line", who:"narrator", text:"现在，你做到了。" },
     { type:"choice", options:[
-      { text:"「告诉我，我叫什么名字。」「, aff:{}, flag:」name_self", next:"true_name" },
-      { text:"「我不想想起来。」「, aff:{}, flag:」refuse_self", next:"true_refuse" },
-      { text:"「她们三个还会等我吗？」「, aff:{}, flag:」care_three", next:"true_care" }
+      { text:"告诉我，我叫什么名字。", flag:"name_self", next:"true_name" },
+      { text:"我不想想起来。", flag:"refuse_self", next:"true_refuse" },
+      { text:"她们三个还会等我吗？", flag:"care_three", next:"true_care" }
     ]},
 
     { type:"label", id:"true_name" },
-    { type:"line", who:"unknown", text:"林夕。林千夜的双胞胎兄弟。云璃姐姐的男朋友。银的发小。" },
-    { type:"line", who:"unknown", text:"她们三个失忆，是因为「事故」。你失忆，是因为你受不了「她们三个都因为你而失忆」。" },
+    { type:"line", who:"narrator", text:"林夕。林千夜的双胞胎兄弟。云璃姐姐的男朋友。银的发小。" },
+    { type:"line", who:"narrator", text:"她们三个失忆，是因为事故。你失忆，是因为你受不了她们三个都因为你而失忆。" },
     { type:"line", who:"player", text:"（你的眼眶，开始热了。）" },
     { type:"player_reveal" },
     { type:"jump", to:"true_close" },
 
     { type:"label", id:"true_refuse" },
-    { type:"line", who:"unknown", text:"……你忘了她们的话，她们会再忘掉你一次。" },
-    { type:"line", who:"unknown", text:"重新选择吧。" },
+    { type:"line", who:"narrator", text:"……你忘了她们的话，她们会再忘掉你一次。" },
+    { type:"line", who:"narrator", text:"重新选择吧。" },
     { type:"jump", to:"true_name" },
 
     { type:"label", id:"true_care" },
-    { type:"line", who:"unknown", text:"她们已经在档案库门口等你了——10 分钟了。" },
-    { type:"line", who:"unknown", text:"千夜没有催，云璃数着秒数没说话，银从头到尾没眨眼。" },
+    { type:"line", who:"narrator", text:"她们已经在档案库门口等你了——10 分钟了。" },
+    { type:"line", who:"narrator", text:"千夜没有催，云璃数着秒数没说话，银从头到尾没眨眼。" },
     { type:"line", who:"player", text:"（……你笑了。也哭了。）" },
     { type:"jump", to:"true_name" },
 
     { type:"label", id:"true_close" },
     { type:"narr", scene:"archive", fx:"flash", text:"——你推开档案库的门。" },
-    { type:"narr", scene:"archive", text:"千夜抬起头第一个看见你，叫了一声「夕」。" },
+    { type:"narr", scene:"archive", text:"千夜抬起头第一个看见你，叫了一声夕。" },
     { type:"narr", scene:"archive", text:"云璃跑过来抱住你，鼻涕眼泪哭花了脸。" },
-    { type:"narr", scene:"archive", text:"银什么都没说。但他左眼的画面，第一次切换到了「现在」。" },
-    { type:"cg", id:"true_cg", title:"星海拾遗「, scene:」archive", img:"qianye_he" },
-    { type:"end", tag:"HE", title:"星海拾遗",
-      en:"Stellar Memoir · True End",
+    { type:"narr", scene:"archive", text:"银什么都没说。但他左眼的画面，第一次切换到了现在。" },
+    { type:"cg", id:"true_cg", title:"星海拾遗", scene:"archive", img:"qianye_he" },
+    { type:"end", tag:"HE", title:"星海拾遗", en:"Stellar Memoir · True End",
       body:"原来这艘星舰从一开始，就是你为自己设计的疗愈所。\n\n你以为你在修她们。\n其实是她们用 12 年的等待，替你修好了你自己。\n\n——下一次相遇，你们都已先认出了彼此。" }
   ]
 };

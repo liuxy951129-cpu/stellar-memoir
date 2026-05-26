@@ -145,6 +145,7 @@ window.Engine = {
   showChapter(step){
     const layer = document.getElementById("sceneLayer");
     Scene.set(layer, document.getElementById("sceneFx"), step.scene || "deck");
+    Portrait.clear(document.getElementById("charStage"));
     document.getElementById("dayTag").textContent = "Day " + step.day;
     document.getElementById("chapterTag").textContent = step.name;
     const cf = document.createElement("div");
@@ -180,12 +181,21 @@ window.Engine = {
     }
 
     if (step.who === "narrator" || step.who === "player"){
-      const exists = charStage.querySelector(".portrait");
-      if (!exists && route) Portrait.setStage(charStage, route.id, "calm");
+      // 旁白和玩家说话时：隐藏立绘
+      Portrait.hide(charStage);
     } else if (step.who === route?.id){
+      // 角色说话时：显示并切表情
+      Portrait.setStage(charStage, route.id, step.exp || "calm");
       Portrait.setExp(charStage, route.id, step.exp || "calm");
-      const w = charStage.querySelector(".portrait");
-      if (w) w.classList.add("in");
+    } else if (step.who && step.who !== "narrator"){
+      // 其他角色（少见）
+      const exists = charStage.querySelector(`.portrait[data-role="${step.who}"]`);
+      if (!exists){
+        Portrait.setStage(charStage, step.who, step.exp || "calm");
+      } else {
+        Portrait.setExp(charStage, step.who, step.exp || "calm");
+        Portrait.show(charStage);
+      }
     }
 
     let label = "";

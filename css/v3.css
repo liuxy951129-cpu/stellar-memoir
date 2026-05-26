@@ -94,16 +94,21 @@
   box-shadow:0 12px 40px rgba(0,0,0,.5);
 }
 .dock-btn{
-  width:60px;height:60px;border-radius:50%;
+  width:62px;height:64px;border-radius:14px;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   background:linear-gradient(180deg, rgba(125,77,255,.25), rgba(58,214,255,.15));
   border:1px solid rgba(255,255,255,.2);
   transition:transform .2s, box-shadow .2s;
-  gap:2px;
+  gap:2px;padding:4px;
 }
 .dock-btn:hover{transform:translateY(-4px);box-shadow:0 8px 20px rgba(125,77,255,.5);}
+.dock-img{
+  width:36px;height:36px;
+  object-fit:contain;
+  filter:drop-shadow(0 2px 6px rgba(0,0,0,.3));
+}
 .dock-emoji{font-size:22px;line-height:1;}
-.dock-name{font-size:9px;letter-spacing:.1em;color:#fff;}
+.dock-name{font-size:10px;letter-spacing:.1em;color:#fff;}
 
 .title-credit{
   position:absolute;bottom:8px;left:50%;transform:translateX(-50%);
@@ -185,27 +190,40 @@
 .affinity-mini{display:none !important;}
 .hud-top{padding-right:120px;} /* 给右上角圆形 HUD 留位 */
 
-/* ----- 立绘修正：透明 PNG 不需要灰色背景 ----- */
+/* ----- 立绘修正：透明 PNG + 上身露出 ----- */
 .portrait{
-  width:min(380px,72%);
-  height:72%;
-  bottom:160px;     /* 留出对话框 + tool bar 高度 */
+  width:min(440px,90%);
+  height:78%;
+  bottom:130px;
   filter:drop-shadow(0 12px 40px rgba(0,0,0,.55));
+  transition:opacity .55s ease;
 }
 .portrait img{
   width:100%;height:100%;object-fit:contain;object-position:bottom center;
 }
 
-/* 玩家剪影特殊样式 */
+/* 玩家剪影位置 */
 .player-portrait{
-  position:absolute;bottom:0;left:50%;transform:translateX(-50%);
-  width:min(420px,70%);height:90%;
+  position:absolute;bottom:130px;left:50%;transform:translateX(-50%);
+  width:min(360px,80%);height:74%;
   filter:drop-shadow(0 8px 30px rgba(125,77,255,.7));
   opacity:0;
   transition:opacity .8s;
 }
 .player-portrait.in{opacity:1;}
 .player-portrait img{width:100%;height:100%;object-fit:contain;object-position:bottom center;}
+
+/* route-card 头像：完整露脸 */
+.route-card{ overflow:hidden; }
+.route-card .rc-bg{
+  background:linear-gradient(180deg, #1a1547, #0a0d28) !important;
+}
+.route-card .rc-bg img{
+  position:absolute; inset:0;
+  width:100%; height:100%;
+  object-fit:cover !important;
+  object-position:center 18% !important;
+}
 
 /* ----- 小游戏中心列表 ----- */
 .mini-list{
@@ -258,12 +276,7 @@
 }
 .profile-clue h4{font-size:13px;letter-spacing:.25em;color:#ff77a8;margin-bottom:6px;}
 
-/* ----- route-card 头像 object-fit ----- */
-.route-card .rc-bg img{
-  object-fit:contain !important;
-  object-position:center 25% !important;
-  background:linear-gradient(180deg, #1a1547, #0a0d28);
-}
+/* (route-card 头像规则已上移) */
 
 /* 移动端 */
 @media (max-width:480px){
