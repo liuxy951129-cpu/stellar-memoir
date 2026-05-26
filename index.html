@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<title>星海拾遗 · Stellar Memoir</title>
+<link rel="stylesheet" href="css/main.css" />
+<link rel="stylesheet" href="css/character.css" />
+<link rel="stylesheet" href="css/ui.css" />
+</head>
+<body>
+<div id="app">
+
+  <!-- 标题屏 -->
+  <section id="title-screen" class="screen active">
+    <div class="bg-stars"></div>
+    <div class="bg-nebula"></div>
+    <div class="bg-shooting"></div>
+    <div class="title-wrap">
+      <div class="title-sub">VISUAL NOVEL · 星舰记忆修复局</div>
+      <h1 class="title-main">
+        <span class="cn">星海拾遗</span>
+        <span class="en">Stellar Memoir</span>
+      </h1>
+      <div class="title-tag">在遗忘的银河里，重新爱你一次。</div>
+      <div class="title-menu">
+        <button class="btn-primary" data-action="start-new">开 始 故 事</button>
+        <button class="btn-ghost" data-action="continue">继 续</button>
+        <button class="btn-ghost" data-action="gallery">回 忆 相 册</button>
+        <button class="btn-ghost" data-action="gacha">记 忆 抽 取</button>
+        <button class="btn-ghost" data-action="settings">设 置</button>
+      </div>
+      <div class="title-foot">v1.0 · Day 1 ~ Day 3 已开放 · 共 3 条主线</div>
+    </div>
+    <div class="title-credit">© 2026 Stellar Memoir Studio · 致每一位被光遗忘的人</div>
+  </section>
+
+  <!-- 角色选择 -->
+  <section id="route-select" class="screen">
+    <div class="bg-stars"></div>
+    <div class="route-header">
+      <div class="route-back" data-action="to-title">‹ 返回</div>
+      <h2>选择今日要修复的人</h2>
+      <p class="route-tip">每条主线包含 3 天剧情 · 不同选择导向 4 种结局</p>
+    </div>
+    <div class="route-cards" id="routeCards"></div>
+  </section>
+
+  <!-- 主游戏屏 -->
+  <section id="game-screen" class="screen">
+    <!-- 背景层 -->
+    <div class="scene-layer" id="sceneLayer"></div>
+    <div class="scene-fx" id="sceneFx"></div>
+    <!-- 立绘层 -->
+    <div class="char-stage" id="charStage"></div>
+    <!-- 顶部 HUD -->
+    <div class="hud-top">
+      <div class="hud-left">
+        <div class="day-tag" id="dayTag">Day 1</div>
+        <div class="chapter-tag" id="chapterTag">第一章 · 醒来</div>
+      </div>
+      <div class="hud-right">
+        <div class="affinity-mini" id="affinityMini"></div>
+        <button class="hud-btn" data-action="menu">≡</button>
+      </div>
+    </div>
+    <!-- 对话框 -->
+    <div class="dialog-box" id="dialogBox">
+      <div class="speaker" id="speaker">？？？</div>
+      <div class="dialog-text" id="dialogText"></div>
+      <div class="dialog-arrow">▼</div>
+    </div>
+    <!-- 选项 -->
+    <div class="choice-box" id="choiceBox"></div>
+    <!-- 底部工具条 -->
+    <div class="hud-bottom">
+      <button class="tool-btn" data-action="auto">自动</button>
+      <button class="tool-btn" data-action="skip">跳过</button>
+      <button class="tool-btn" data-action="log">日志</button>
+      <button class="tool-btn" data-action="save">存档</button>
+      <button class="tool-btn" data-action="load">读档</button>
+    </div>
+  </section>
+
+  <!-- 回忆相册 -->
+  <section id="gallery-screen" class="screen">
+    <div class="bg-stars"></div>
+    <div class="gal-header">
+      <div class="route-back" data-action="to-title">‹ 返回</div>
+      <h2>回忆相册</h2>
+      <p class="route-tip">已收集 <span id="galCount">0</span> / 12 段记忆碎片</p>
+    </div>
+    <div class="gallery-grid" id="galleryGrid"></div>
+  </section>
+
+  <!-- 抽卡 -->
+  <section id="gacha-screen" class="screen">
+    <div class="bg-stars"></div>
+    <div class="bg-nebula gacha-nebula"></div>
+    <div class="gacha-wrap">
+      <div class="route-back" data-action="to-title">‹ 返回</div>
+      <h2 class="gacha-title">记忆抽取 · Memory Capsule</h2>
+      <p class="route-tip">使用「星币」回收散落在银河中的记忆碎片</p>
+      <div class="gacha-stat">
+        <span>★ 星币：<b id="coinNum">300</b></span>
+        <span>♦ 钻石：<b id="diamondNum">10</b></span>
+      </div>
+      <div class="gacha-machine" id="gachaMachine">
+        <div class="capsule"></div>
+        <div class="capsule-glow"></div>
+      </div>
+      <div class="gacha-btns">
+        <button class="btn-primary" data-action="gacha-1">单抽 · 100 ★</button>
+        <button class="btn-primary glow" data-action="gacha-10">十连 · 900 ★（保底SR）</button>
+        <button class="btn-ghost" data-action="recharge">充值（仅演示）</button>
+      </div>
+      <div class="gacha-result" id="gachaResult"></div>
+    </div>
+  </section>
+
+  <!-- 设置 -->
+  <section id="settings-screen" class="screen">
+    <div class="bg-stars"></div>
+    <div class="settings-wrap">
+      <div class="route-back" data-action="to-title">‹ 返回</div>
+      <h2>设置</h2>
+      <div class="setting-row">
+        <label>文字速度</label>
+        <input type="range" min="10" max="80" value="35" id="textSpeed" />
+      </div>
+      <div class="setting-row">
+        <label>自动播放间隔</label>
+        <input type="range" min="800" max="4000" value="1800" id="autoSpeed" />
+      </div>
+      <div class="setting-row">
+        <label>BGM 音量</label>
+        <input type="range" min="0" max="100" value="60" id="bgmVol" />
+      </div>
+      <div class="setting-row">
+        <label>已读跳过</label>
+        <input type="checkbox" id="onlyReadSkip" checked />
+      </div>
+      <button class="btn-ghost" data-action="reset-save">清空所有存档</button>
+    </div>
+  </section>
+
+  <!-- 浮层 · 通用 -->
+  <div class="modal" id="modal">
+    <div class="modal-card">
+      <div class="modal-title" id="modalTitle"></div>
+      <div class="modal-body" id="modalBody"></div>
+      <div class="modal-foot">
+        <button class="btn-primary" data-action="modal-ok">确认</button>
+        <button class="btn-ghost" data-action="modal-cancel">取消</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CG 大图 -->
+  <div class="cg-viewer" id="cgViewer">
+    <div class="cg-inner" id="cgInner"></div>
+    <button class="cg-close" data-action="close-cg">×</button>
+  </div>
+
+</div>
+
+<script src="js/data.story.js"></script>
+<script src="js/data.routes.js"></script>
+<script src="js/data.gacha.js"></script>
+<script src="js/portrait.js"></script>
+<script src="js/scene.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/save.js"></script>
+<script src="js/gallery.js"></script>
+<script src="js/gacha.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
